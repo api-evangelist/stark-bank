@@ -1,0 +1,428 @@
+openapi: 3.1.0
+info:
+  title: Stark Bank Balance Deposit API
+  version: v2
+  description: 'This is our second API version. It is another small step towards launching the product we want to create for you, but it''s a giant leap for the brazilian financial market. We created the first banking API in Brazil and we are proud of it.
+
+    Our API is RESTFul. This means we use predictable, resource-oriented URLs to do banking operations. The API itself speaks exclusively in JSON, including errors, but our SDK libraries convert responses to appropriate language-specific objects.
+
+    Want to check our OpenAPI 3.1 specification? You can download our yaml file right here.
+
+    You can also try our Postman collection. Download it here.
+
+    '
+  contact:
+    name: Stark Bank Developers
+    email: help@starkbank.com
+    url: https://starkbank.com
+  license:
+    name: Stark Bank License
+servers:
+- url: https://api.starkbank.com
+  description: Production
+- url: https://sandbox.api.starkbank.com
+  description: Sandbox
+security:
+- digitalSignature: []
+tags:
+- name: Deposit
+  description: Deposits represent passive cash-ins received by your account from external transfers or payments. In this section, we will teach you how to manage your Deposits.
+paths:
+  /v2/deposit:
+    get:
+      summary: List Deposits
+      operationId: list-deposit
+      tags:
+      - Deposit
+      description: Here you can list and filter all deposits you have received. We return it paged.
+      parameters:
+      - name: after
+        in: query
+        description: Filter entities created after this date.
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: before
+        in: query
+        description: Filter entities created before this date.
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: cursor
+        in: query
+        description: String used to get the next batch of results. Our SDKs handle this for you.
+        required: false
+        schema:
+          type: string
+      - name: fields
+        in: query
+        description: List of strings to filter response JSON keys. Not available in the SDKs.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: ids
+        in: query
+        description: List of strings to get specific entities by ids.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: limit
+        in: query
+        description: Number of results per cursor. Max = 100.
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+      - name: sort
+        in: query
+        description: 'Sort order considered in the response. Options are: "created", "-created".'
+        required: false
+        schema:
+          type: string
+      - name: status
+        in: query
+        description: Filter deposits by the specified status.
+        required: false
+        schema:
+          type: string
+      - name: tags
+        in: query
+        description: Filter entities that contain the specified tags.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+  /v2/deposit/{id}:
+    get:
+      summary: Get a Deposit
+      operationId: get-deposit-byId
+      tags:
+      - Deposit
+      description: Get a single Deposit by its id.
+      parameters:
+      - name: id
+        in: path
+        description: 'Id of the deposit. Example: ''5656565656565656''.'
+        required: true
+        schema:
+          type: string
+      - name: fields
+        in: query
+        description: List of strings to filter response JSON keys. Not available in the SDKs.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+    patch:
+      summary: Update a Deposit
+      operationId: update-deposit-byId
+      tags:
+      - Deposit
+      description: Update the Deposit by passing its id to be partially or fully reversed.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                amount:
+                  type: integer
+                  description: The new amount of the Deposit. If the amount = 0 the Deposit will be fully reversed
+              required:
+              - amount
+      parameters:
+      - name: id
+        in: path
+        description: 'Id of the deposit. Example: ''5155165527080960''.'
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+  /v2/deposit/log:
+    get:
+      summary: List Deposit Logs
+      operationId: list-deposit-log
+      tags:
+      - Deposit
+      description: Get a paged list of all deposit logs. A log tracks a change in the deposit entity according to its life cycle.
+      parameters:
+      - name: after
+        in: query
+        description: Filter entities created after this date.
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: before
+        in: query
+        description: Filter entities created before this date.
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: cursor
+        in: query
+        description: String used to get the next batch of results. Our SDKs handle this for you.
+        required: false
+        schema:
+          type: string
+      - name: depositIds
+        in: query
+        description: Array of deposit ids that are linked to the logs you desire.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: fields
+        in: query
+        description: List of strings to filter response JSON keys. Not available in the SDKs.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: limit
+        in: query
+        description: Number of results per cursor. Max = 100.
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+      - name: types
+        in: query
+        description: Filters logs by log types.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+  /v2/deposit/log/{id}:
+    get:
+      summary: Get a Deposit Log
+      operationId: get-deposit-log-byId
+      tags:
+      - Deposit
+      description: Get a single deposit log by its id.
+      parameters:
+      - name: id
+        in: path
+        description: Id of the log entity
+        required: true
+        schema:
+          type: string
+      - name: fields
+        in: query
+        description: List of strings to filter response JSON keys. Not available in the SDKs.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+  /v2/deposit/log/{id}/pdf:
+    get:
+      summary: Get a reversed Deposit Log PDF
+      operationId: get-deposit-log-byId-pdf
+      tags:
+      - Deposit
+      description: Whenever a Deposit is successfully reversed, a reversed log will be created. To retrieve a specific reversal receipt, you can request the corresponding log PDF.
+      parameters:
+      - name: id
+        in: path
+        description: Id of the log Deposit entity.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+components:
+  schemas:
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code string
+        message:
+          type: string
+          description: Human-readable error message
+  securitySchemes:
+    digitalSignature:
+      type: apiKey
+      name: Digital-Signature
+      in: header
+      description: ECDSA digital signature for request authentication
+externalDocs:
+  url: https://docs.starkbank.com/api
+  description: Stark Bank API documentation
+x-tagGroups:
+- name: Business Account
+  tags:
+  - Workspace
+  - Balance
+  - Transaction
+- name: Cash Receivables
+  tags:
+  - Invoice
+  - Dynamic Brcode
+  - Deposit
+  - Boleto
+  - Boleto Holmes
+  - Split
+  - Split Receiver
+  - Split Profile
+- name: Cash Subscription
+  tags:
+  - Invoice Pull Subscription
+  - Invoice Pull Request
+- name: Card Receivables
+  tags:
+  - Merchant Session
+  - Merchant Purchase
+  - Merchant Card
+  - Merchant Installment
+- name: Bill Payments
+  tags:
+  - Transfer
+  - Brcode Payment
+  - Boleto Payment
+  - Utility Payment
+  - Tax Payment
+  - Darf Payment
+  - Payment Preview
+  - Payment Request
+- name: Others
+  tags:
+  - Webhook
+  - Event
+  - Event Attempt
+  - Pix Key
+  - Institutions
+  - Public Key

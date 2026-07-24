@@ -1,0 +1,280 @@
+openapi: 3.1.0
+info:
+  title: Stark Bank Balance Webhook API
+  version: v2
+  description: 'This is our second API version. It is another small step towards launching the product we want to create for you, but it''s a giant leap for the brazilian financial market. We created the first banking API in Brazil and we are proud of it.
+
+    Our API is RESTFul. This means we use predictable, resource-oriented URLs to do banking operations. The API itself speaks exclusively in JSON, including errors, but our SDK libraries convert responses to appropriate language-specific objects.
+
+    Want to check our OpenAPI 3.1 specification? You can download our yaml file right here.
+
+    You can also try our Postman collection. Download it here.
+
+    '
+  contact:
+    name: Stark Bank Developers
+    email: help@starkbank.com
+    url: https://starkbank.com
+  license:
+    name: Stark Bank License
+servers:
+- url: https://api.starkbank.com
+  description: Production
+- url: https://sandbox.api.starkbank.com
+  description: Sandbox
+security:
+- digitalSignature: []
+tags:
+- name: Webhook
+  description: 'You can create webhook subscriptions to receive events whenever a new log is created. We send the event by making a POST request to your endpoint URL. The event will be delivered with a digital signature (headers["Digital-Signature"]), which can be verified using the Stark Bank public key. This key is recoverable by a GET request to /v2/public-key.
+
+    If your endpoint URL does not return a 200 status, the webhook service will try again at most three times. The interval between each attempt is 5 min, 30 min and finally 120 min. In case the event cannot be delivered after those three attempts, we will stop trying to deliver the message.
+
+    The event sent to the endpoint URL has the structure shown to the right, where the content of the log sent will depend on the event subscription.
+
+    NOTE 1: Registered webhooks will only work for services used in that same version. For example, if you create a transfer in v2, its logs will only trigger v2 webhooks and v1 webhooks would ignore its events.
+
+    NOTE 2: Even if you use Webhook, we strongly recommend that you create a daily task to get all undelivered events and set them as delivered. It''s important to add redundancy and resilience to your system, preventing you from having outdated information just in case your system is temporarily unable to receive our Webhook events.
+
+    '
+paths:
+  /v2/webhook:
+    post:
+      summary: Create a Webhook
+      operationId: create-webhook
+      tags:
+      - Webhook
+      description: Here you can register a new webhook URL. The subscriptions refer to which kinds of logs will be sent to the webhook URL being registered. The subscriptions must be in transfer, boleto, boleto-payment, utility-payment, brcode-payment, boleto-holmes, deposit, darf-payment, payment-request or invoice.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                subscriptions:
+                  type: array
+                  items:
+                    type: string
+                  description: 'Array of subscriptions. Possible values: "deposit", "invoice", "brcode-payment", "transfer", "utility-payment", "boleto", "boleto-payment", "darf-payment", "payment-request" or "boleto-holmes"'
+                url:
+                  type: string
+                  description: The server URL that will receive the Webhook Events.
+              required:
+              - subscriptions
+              - url
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+    get:
+      summary: List Webhooks
+      operationId: list-webhook
+      tags:
+      - Webhook
+      description: Get a list of non-deleted webhooks in chunks of at most 100. If you need smaller chunks, use the limit parameter.
+      parameters:
+      - name: cursor
+        in: query
+        description: String used to get the next batch of results. Our SDKs handle this for you.
+        required: false
+        schema:
+          type: string
+      - name: fields
+        in: query
+        description: List of strings to filter response JSON keys. Not available in the SDKs.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: limit
+        in: query
+        description: Maximum number of Webhooks to be retrieved. Max = 100.
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+  /v2/webhook/{id}:
+    get:
+      summary: Get a Webhook
+      operationId: get-webhook-byId
+      tags:
+      - Webhook
+      description: Get a single Webhook by its id.
+      parameters:
+      - name: id
+        in: path
+        description: Id of the webhook entity
+        required: true
+        schema:
+          type: string
+      - name: fields
+        in: query
+        description: List of strings to filter response JSON keys. Not available in the SDKs.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+    delete:
+      summary: Delete a Webhook
+      operationId: delete-webhook-byId
+      tags:
+      - Webhook
+      description: 'Delete a single Webhook subscription.
+
+        NOTE: This action cannot be undone.
+
+        '
+      parameters:
+      - name: id
+        in: path
+        description: Id of the Webhook to be canceled.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successfully deleted
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+components:
+  schemas:
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code string
+        message:
+          type: string
+          description: Human-readable error message
+  securitySchemes:
+    digitalSignature:
+      type: apiKey
+      name: Digital-Signature
+      in: header
+      description: ECDSA digital signature for request authentication
+externalDocs:
+  url: https://docs.starkbank.com/api
+  description: Stark Bank API documentation
+x-tagGroups:
+- name: Business Account
+  tags:
+  - Workspace
+  - Balance
+  - Transaction
+- name: Cash Receivables
+  tags:
+  - Invoice
+  - Dynamic Brcode
+  - Deposit
+  - Boleto
+  - Boleto Holmes
+  - Split
+  - Split Receiver
+  - Split Profile
+- name: Cash Subscription
+  tags:
+  - Invoice Pull Subscription
+  - Invoice Pull Request
+- name: Card Receivables
+  tags:
+  - Merchant Session
+  - Merchant Purchase
+  - Merchant Card
+  - Merchant Installment
+- name: Bill Payments
+  tags:
+  - Transfer
+  - Brcode Payment
+  - Boleto Payment
+  - Utility Payment
+  - Tax Payment
+  - Darf Payment
+  - Payment Preview
+  - Payment Request
+- name: Others
+  tags:
+  - Webhook
+  - Event
+  - Event Attempt
+  - Pix Key
+  - Institutions
+  - Public Key

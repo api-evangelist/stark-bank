@@ -1,0 +1,158 @@
+openapi: 3.1.0
+info:
+  title: Stark Bank Balance Institutions API
+  version: v2
+  description: 'This is our second API version. It is another small step towards launching the product we want to create for you, but it''s a giant leap for the brazilian financial market. We created the first banking API in Brazil and we are proud of it.
+
+    Our API is RESTFul. This means we use predictable, resource-oriented URLs to do banking operations. The API itself speaks exclusively in JSON, including errors, but our SDK libraries convert responses to appropriate language-specific objects.
+
+    Want to check our OpenAPI 3.1 specification? You can download our yaml file right here.
+
+    You can also try our Postman collection. Download it here.
+
+    '
+  contact:
+    name: Stark Bank Developers
+    email: help@starkbank.com
+    url: https://starkbank.com
+  license:
+    name: Stark Bank License
+servers:
+- url: https://api.starkbank.com
+  description: Production
+- url: https://sandbox.api.starkbank.com
+  description: Sandbox
+security:
+- digitalSignature: []
+tags:
+- name: Institutions
+  description: An Institution is used to query institutions registered by the Brazilian Central Bank for Pix and Ted transactions.
+paths:
+  /v2/institution:
+    get:
+      summary: List Institutions
+      operationId: list-institution
+      tags:
+      - Institutions
+      description: Get a list of institutions.
+      parameters:
+      - name: limit
+        in: query
+        description: Number of results per cursor. Max = 100.
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+      - name: search
+        in: query
+        description: 'Part of the institution name to be searched. Example: "stark"'
+        required: false
+        schema:
+          type: string
+      - name: spiCodes
+        in: query
+        description: 'List of SPI (Pix) codes to be searched. Example: ["20018183"]'
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: strCodes
+        in: query
+        description: 'List of STR (Ted) codes to be searched. Example: ["260"]'
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+components:
+  schemas:
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code string
+        message:
+          type: string
+          description: Human-readable error message
+  securitySchemes:
+    digitalSignature:
+      type: apiKey
+      name: Digital-Signature
+      in: header
+      description: ECDSA digital signature for request authentication
+externalDocs:
+  url: https://docs.starkbank.com/api
+  description: Stark Bank API documentation
+x-tagGroups:
+- name: Business Account
+  tags:
+  - Workspace
+  - Balance
+  - Transaction
+- name: Cash Receivables
+  tags:
+  - Invoice
+  - Dynamic Brcode
+  - Deposit
+  - Boleto
+  - Boleto Holmes
+  - Split
+  - Split Receiver
+  - Split Profile
+- name: Cash Subscription
+  tags:
+  - Invoice Pull Subscription
+  - Invoice Pull Request
+- name: Card Receivables
+  tags:
+  - Merchant Session
+  - Merchant Purchase
+  - Merchant Card
+  - Merchant Installment
+- name: Bill Payments
+  tags:
+  - Transfer
+  - Brcode Payment
+  - Boleto Payment
+  - Utility Payment
+  - Tax Payment
+  - Darf Payment
+  - Payment Preview
+  - Payment Request
+- name: Others
+  tags:
+  - Webhook
+  - Event
+  - Event Attempt
+  - Pix Key
+  - Institutions
+  - Public Key

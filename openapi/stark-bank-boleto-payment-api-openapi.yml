@@ -1,0 +1,475 @@
+openapi: 3.1.0
+info:
+  title: Stark Bank Balance Boleto Payment API
+  version: v2
+  description: 'This is our second API version. It is another small step towards launching the product we want to create for you, but it''s a giant leap for the brazilian financial market. We created the first banking API in Brazil and we are proud of it.
+
+    Our API is RESTFul. This means we use predictable, resource-oriented URLs to do banking operations. The API itself speaks exclusively in JSON, including errors, but our SDK libraries convert responses to appropriate language-specific objects.
+
+    Want to check our OpenAPI 3.1 specification? You can download our yaml file right here.
+
+    You can also try our Postman collection. Download it here.
+
+    '
+  contact:
+    name: Stark Bank Developers
+    email: help@starkbank.com
+    url: https://starkbank.com
+  license:
+    name: Stark Bank License
+servers:
+- url: https://api.starkbank.com
+  description: Production
+- url: https://sandbox.api.starkbank.com
+  description: Sandbox
+security:
+- digitalSignature: []
+tags:
+- name: Boleto Payment
+  description: Here we will teach you how to create and manage boleto payments.
+paths:
+  /v2/boleto-payment:
+    post:
+      summary: Create Boleto Payments
+      operationId: create-boletoPayment
+      tags:
+      - Boleto Payment
+      description: Use this route to pay registered boletos generated at Stark Bank or at other financial institutions using the available balance in your Stark Bank account.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                description:
+                  type: string
+                  description: Text to be displayed in your statement. Min length = 10.
+                taxId:
+                  type: string
+                  description: 'Receiver CPF (11 digits formatted or unformatted) or CNPJ (14 digits formatted or unformatted). Example: 012.345.678-90.'
+                amount:
+                  type: integer
+                  description: 'Amount to be paid. If none is informed, the current boleto value will be used. Example: 23456 (= R$ 234.56)'
+                barCode:
+                  type: string
+                  description: Bar code number that describes the payment. Either "line" or "barCode" parameters are required. If both are sent, they must match.
+                line:
+                  type: string
+                  description: Number sequence that describes the payment. Either "line" or "barCode" parameters are required. If both are sent, they must match.
+                scheduled:
+                  type: string
+                  format: date-time
+                  description: Schedule the payment for a specific date. Default value is the current day.
+                tags:
+                  type: array
+                  items:
+                    type: string
+                  description: Array of strings to tag the entity for future queries. All tags will be converted to lowercase.
+              required:
+              - description
+              - taxId
+              - barCode
+              - line
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+    get:
+      summary: List Boleto Payments
+      operationId: list-boletoPayment
+      tags:
+      - Boleto Payment
+      description: Get a list of non-deleted boleto payments in chunks of at most 100. If you need smaller chunks, use the limit parameter.
+      parameters:
+      - name: after
+        in: query
+        description: Filter entities created after this date.
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: before
+        in: query
+        description: Filter entities created before this date.
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: cursor
+        in: query
+        description: String used to get the next batch of results. Our SDKs handle this for you.
+        required: false
+        schema:
+          type: string
+      - name: fields
+        in: query
+        description: List of strings to filter response JSON keys. Not available in the SDKs.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: ids
+        in: query
+        description: List of strings to get specific entities by ids.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: limit
+        in: query
+        description: Number of results per cursor. Max = 100.
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+      - name: status
+        in: query
+        description: Filter boleto payments by the specified status.
+        required: false
+        schema:
+          type: string
+      - name: tags
+        in: query
+        description: Filter entities that contain the specified tags.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+  /v2/boleto-payment/{id}:
+    get:
+      summary: Get a Boleto Payment
+      operationId: get-boletoPayment-byId
+      tags:
+      - Boleto Payment
+      description: Get a single boleto payment by its id.
+      parameters:
+      - name: id
+        in: path
+        description: Id of the boleto payment entity.
+        required: true
+        schema:
+          type: string
+      - name: fields
+        in: query
+        description: List of strings to filter response JSON keys. Not available in the SDKs.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+    delete:
+      summary: Delete a Boleto Payment
+      operationId: delete-boletoPayment-byId
+      tags:
+      - Boleto Payment
+      description: 'Cancel a scheduled boleto payment. You can only cancel boleto payments before they start being processed.
+
+        NOTE:Payments that have already been processed can be deleted, but not cancelled.
+
+        '
+      parameters:
+      - name: id
+        in: path
+        description: Id of the boleto payment entity.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successfully deleted
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+  /v2/boleto-payment/{id}/pdf:
+    get:
+      summary: Get a Boleto Payment PDF
+      operationId: get-boletoPayment-byId-pdf
+      tags:
+      - Boleto Payment
+      description: Get a boleto payment PDF receipt. You can only get a receipt for payments whose status are either success, processing or created.
+      parameters:
+      - name: id
+        in: path
+        description: Id of the boleto payment entity
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+  /v2/boleto-payment/log:
+    get:
+      summary: List Boleto Payment Logs
+      operationId: list-boletoPayment-log
+      tags:
+      - Boleto Payment
+      description: Get a paged list of all boleto payment logs. A log tracks a change in the payment entity according to its life cycle.
+      parameters:
+      - name: after
+        in: query
+        description: Filter entities created after this date.
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: before
+        in: query
+        description: Filter entities created before this date.
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: cursor
+        in: query
+        description: String used to get the next batch of results. Our SDKs handle this for you.
+        required: false
+        schema:
+          type: string
+      - name: fields
+        in: query
+        description: List of strings to filter response JSON keys. Not available in the SDKs.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: limit
+        in: query
+        description: Number of results per cursor. Max = 100.
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+      - name: paymentIds
+        in: query
+        description: Array of payment ids linked to the desired logs.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: types
+        in: query
+        description: Filters logs by log types.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+  /v2/boleto-payment/log/{id}:
+    get:
+      summary: Get a Boleto Payment Log
+      operationId: get-boletoPayment-log-byId
+      tags:
+      - Boleto Payment
+      description: Get a single boleto payment log by its id.
+      parameters:
+      - name: id
+        in: path
+        description: Id of the log entity
+        required: true
+        schema:
+          type: string
+      - name: fields
+        in: query
+        description: List of strings to filter response JSON keys. Not available in the SDKs.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+components:
+  schemas:
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code string
+        message:
+          type: string
+          description: Human-readable error message
+  securitySchemes:
+    digitalSignature:
+      type: apiKey
+      name: Digital-Signature
+      in: header
+      description: ECDSA digital signature for request authentication
+externalDocs:
+  url: https://docs.starkbank.com/api
+  description: Stark Bank API documentation
+x-tagGroups:
+- name: Business Account
+  tags:
+  - Workspace
+  - Balance
+  - Transaction
+- name: Cash Receivables
+  tags:
+  - Invoice
+  - Dynamic Brcode
+  - Deposit
+  - Boleto
+  - Boleto Holmes
+  - Split
+  - Split Receiver
+  - Split Profile
+- name: Cash Subscription
+  tags:
+  - Invoice Pull Subscription
+  - Invoice Pull Request
+- name: Card Receivables
+  tags:
+  - Merchant Session
+  - Merchant Purchase
+  - Merchant Card
+  - Merchant Installment
+- name: Bill Payments
+  tags:
+  - Transfer
+  - Brcode Payment
+  - Boleto Payment
+  - Utility Payment
+  - Tax Payment
+  - Darf Payment
+  - Payment Preview
+  - Payment Request
+- name: Others
+  tags:
+  - Webhook
+  - Event
+  - Event Attempt
+  - Pix Key
+  - Institutions
+  - Public Key

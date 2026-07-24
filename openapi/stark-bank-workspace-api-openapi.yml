@@ -1,0 +1,328 @@
+openapi: 3.1.0
+info:
+  title: Stark Bank Balance Workspace API
+  version: v2
+  description: 'This is our second API version. It is another small step towards launching the product we want to create for you, but it''s a giant leap for the brazilian financial market. We created the first banking API in Brazil and we are proud of it.
+
+    Our API is RESTFul. This means we use predictable, resource-oriented URLs to do banking operations. The API itself speaks exclusively in JSON, including errors, but our SDK libraries convert responses to appropriate language-specific objects.
+
+    Want to check our OpenAPI 3.1 specification? You can download our yaml file right here.
+
+    You can also try our Postman collection. Download it here.
+
+    '
+  contact:
+    name: Stark Bank Developers
+    email: help@starkbank.com
+    url: https://starkbank.com
+  license:
+    name: Stark Bank License
+servers:
+- url: https://api.starkbank.com
+  description: Production
+- url: https://sandbox.api.starkbank.com
+  description: Sandbox
+security:
+- digitalSignature: []
+tags:
+- name: Workspace
+  description: 'Workspaces are bank accounts. They have independent balances, statements, operations and permissions. The only property that is shared between your workspaces is the link they have to your organization, which carries your basic information, such as tax ID, name, etc...
+
+    The main reason for automating the creation of multiple Workspaces is to use our infrastructure to divide your own customers into different buckets, setting them up with isolated balances and statements.
+
+    '
+paths:
+  /v2/workspace:
+    post:
+      summary: Create a Workspace
+      operationId: create-workspace
+      tags:
+      - Workspace
+      description: 'Here you can create a brand new Workspace.
+
+        Note: Only Organization credentials are able to create Workspaces.
+
+        '
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 'This string will show up to identify your Workspace when you log into it at our Web Banking. Example: ''My Workspace'''
+                username:
+                  type: string
+                  description: This string uniquely identifies the Workspace in our entire database. It is also part of the Workspace Web Banking URL and must, therefore, be URL-safe. For example, if a Workspace in Sandbox has the 'my-workspace' username, its URL would be "https://my-workspace.sandbox.starkbank.com"
+                allowedTaxIds:
+                  type: array
+                  items:
+                    type: string
+                  description: 'List of tax IDs that will be allowed to send Deposits to this Workspace. If empty, all are allowed. Example:
+
+                    ["012.345.678-90", "20.018.183/0001-80"]
+
+                    '
+              required:
+              - name
+              - username
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+    get:
+      summary: List Workspaces
+      operationId: list-workspace
+      tags:
+      - Workspace
+      description: Get a list of Workspaces your credentials have access to in chunks of at most 100. If you need smaller chunks, use the limit parameter.
+      parameters:
+      - name: cursor
+        in: query
+        description: String used to get the next batch of results. Our SDKs handle this for you.
+        required: false
+        schema:
+          type: string
+      - name: fields
+        in: query
+        description: List of strings to filter response JSON keys. Not available in the SDKs.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: ids
+        in: query
+        description: List of IDs of the Workspaces to be retrieved.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: limit
+        in: query
+        description: Number of results per cursor. Max = 100.
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+      - name: username
+        in: query
+        description: Workspace username to be searched.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+  /v2/workspace/{id}:
+    get:
+      summary: Get a Workspace
+      operationId: get-workspace-byId
+      tags:
+      - Workspace
+      description: Get a single workspace by its id.
+      parameters:
+      - name: id
+        in: path
+        description: Id of the workspace entity.
+        required: true
+        schema:
+          type: string
+      - name: fields
+        in: query
+        description: List of strings to filter response JSON keys. Not available in the SDKs.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+    patch:
+      summary: Update a Workspace
+      operationId: update-workspace-byId
+      tags:
+      - Workspace
+      description: Update a workspace by passing its id and the fields you want to update.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                allowedTaxIds:
+                  type: array
+                  items:
+                    type: string
+                  description: 'List of tax IDs that will be allowed to send Deposits to this Workspace. If empty, all are allowed. Example:
+
+                    ["012.345.678-90", "20.018.183/0001-80"]
+
+                    '
+                name:
+                  type: string
+                  description: 'Full name that identifies the Workspace. This name will appear when people access the Workspace on our platform, for example. Example: ''Stark Bank Workspace'''
+                picture:
+                  type: string
+                  description: 'Binary buffer of the picture. Example: open("path/to/picture.png", "rb").read()'
+                pictureType:
+                  type: string
+                  description: 'Picture mime type. This parameter will be required if the picture parameter is informed. Example: ''image/png'' or ''image/jpeg'''
+                status:
+                  type: string
+                  description: 'You can block or activate a specific Workspace. Example: ''active'' or ''blocked'''
+                username:
+                  type: string
+                  description: 'Simplified name to define the workspace URL. This name must be unique across all Stark Bank Workspaces. Example: ''starkbank-workspace'''
+              required:
+              - pictureType
+      parameters:
+      - name: id
+        in: path
+        description: Id of the workspace.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+components:
+  schemas:
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code string
+        message:
+          type: string
+          description: Human-readable error message
+  securitySchemes:
+    digitalSignature:
+      type: apiKey
+      name: Digital-Signature
+      in: header
+      description: ECDSA digital signature for request authentication
+externalDocs:
+  url: https://docs.starkbank.com/api
+  description: Stark Bank API documentation
+x-tagGroups:
+- name: Business Account
+  tags:
+  - Workspace
+  - Balance
+  - Transaction
+- name: Cash Receivables
+  tags:
+  - Invoice
+  - Dynamic Brcode
+  - Deposit
+  - Boleto
+  - Boleto Holmes
+  - Split
+  - Split Receiver
+  - Split Profile
+- name: Cash Subscription
+  tags:
+  - Invoice Pull Subscription
+  - Invoice Pull Request
+- name: Card Receivables
+  tags:
+  - Merchant Session
+  - Merchant Purchase
+  - Merchant Card
+  - Merchant Installment
+- name: Bill Payments
+  tags:
+  - Transfer
+  - Brcode Payment
+  - Boleto Payment
+  - Utility Payment
+  - Tax Payment
+  - Darf Payment
+  - Payment Preview
+  - Payment Request
+- name: Others
+  tags:
+  - Webhook
+  - Event
+  - Event Attempt
+  - Pix Key
+  - Institutions
+  - Public Key

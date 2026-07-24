@@ -1,0 +1,353 @@
+openapi: 3.1.0
+info:
+  title: Stark Bank Balance Merchant Card API
+  version: v2
+  description: 'This is our second API version. It is another small step towards launching the product we want to create for you, but it''s a giant leap for the brazilian financial market. We created the first banking API in Brazil and we are proud of it.
+
+    Our API is RESTFul. This means we use predictable, resource-oriented URLs to do banking operations. The API itself speaks exclusively in JSON, including errors, but our SDK libraries convert responses to appropriate language-specific objects.
+
+    Want to check our OpenAPI 3.1 specification? You can download our yaml file right here.
+
+    You can also try our Postman collection. Download it here.
+
+    '
+  contact:
+    name: Stark Bank Developers
+    email: help@starkbank.com
+    url: https://starkbank.com
+  license:
+    name: Stark Bank License
+servers:
+- url: https://api.starkbank.com
+  description: Production
+- url: https://sandbox.api.starkbank.com
+  description: Sandbox
+security:
+- digitalSignature: []
+tags:
+- name: Merchant Card
+  description: 'The Merchant Card resource stores information about cards used in approved purchases.
+
+    These cards can be used in new purchases without the need to create a new session.
+
+    '
+paths:
+  /v2/merchant-card:
+    get:
+      summary: List Merchant Cards
+      operationId: list-merchantCard
+      tags:
+      - Merchant Card
+      description: Get a list of merchant cards in chunks of at most 100. If you need smaller chunks, use the limit parameter.
+      parameters:
+      - name: after
+        in: query
+        description: Filter entities created after this date.
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: before
+        in: query
+        description: Filter entities created before this date.
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: cursor
+        in: query
+        description: String used to get the next batch of results. Our SDKs handle this for you.
+        required: false
+        schema:
+          type: string
+      - name: fields
+        in: query
+        description: List of strings to filter response JSON keys. Not available in the SDKs.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: ids
+        in: query
+        description: List of strings to get specific entities by ids.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: limit
+        in: query
+        description: Number of results per cursor. Max = 100.
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+      - name: status
+        in: query
+        description: 'Filter cards by the specified status, such as: active, expired, canceled or blocked.'
+        required: false
+        schema:
+          type: string
+      - name: tags
+        in: query
+        description: Filter entities that contain the specified tags.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+  /v2/merchant-card/{id}:
+    get:
+      summary: Get a Merchant Card
+      operationId: get-merchantCard-byId
+      tags:
+      - Merchant Card
+      description: Retrieve detailed information about a specific card by its id.
+      parameters:
+      - name: id
+        in: path
+        description: The unique identifier for the merchant card that needs to be retrieved.
+        required: true
+        schema:
+          type: string
+      - name: fields
+        in: query
+        description: List of strings to filter response JSON keys. Not available in the SDKs.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+  /v2/merchant-card/log:
+    get:
+      summary: List Merchant Card Logs
+      operationId: list-merchantCard-log
+      tags:
+      - Merchant Card
+      description: 'Get a paged list of merchant card logs.
+
+        A log tracks a change in the card entity according to its lifecycle.
+
+        '
+      parameters:
+      - name: after
+        in: query
+        description: Filter entities created after this date.
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: before
+        in: query
+        description: Filter entities created before this date.
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: cardIds
+        in: query
+        description: Array of card ids that are linked to the logs you desire.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: cursor
+        in: query
+        description: String used to get the next batch of results. Our SDKs handle this for you.
+        required: false
+        schema:
+          type: string
+      - name: fields
+        in: query
+        description: List of strings to filter response JSON keys. Not available in the SDKs.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: limit
+        in: query
+        description: Number of results per cursor. Max = 100.
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+      - name: types
+        in: query
+        description: Filters logs by log types.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+  /v2/merchant-card/log/{id}:
+    get:
+      summary: Get a Merchant Card Log
+      operationId: get-merchantCard-log-byId
+      tags:
+      - Merchant Card
+      description: Get a single merchant card log by its id.
+      parameters:
+      - name: id
+        in: path
+        description: The unique identifier for the merchant card that needs to be retrieved.
+        required: true
+        schema:
+          type: string
+      - name: fields
+        in: query
+        description: List of strings to filter response JSON keys. Not available in the SDKs.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+components:
+  schemas:
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code string
+        message:
+          type: string
+          description: Human-readable error message
+  securitySchemes:
+    digitalSignature:
+      type: apiKey
+      name: Digital-Signature
+      in: header
+      description: ECDSA digital signature for request authentication
+externalDocs:
+  url: https://docs.starkbank.com/api
+  description: Stark Bank API documentation
+x-tagGroups:
+- name: Business Account
+  tags:
+  - Workspace
+  - Balance
+  - Transaction
+- name: Cash Receivables
+  tags:
+  - Invoice
+  - Dynamic Brcode
+  - Deposit
+  - Boleto
+  - Boleto Holmes
+  - Split
+  - Split Receiver
+  - Split Profile
+- name: Cash Subscription
+  tags:
+  - Invoice Pull Subscription
+  - Invoice Pull Request
+- name: Card Receivables
+  tags:
+  - Merchant Session
+  - Merchant Purchase
+  - Merchant Card
+  - Merchant Installment
+- name: Bill Payments
+  tags:
+  - Transfer
+  - Brcode Payment
+  - Boleto Payment
+  - Utility Payment
+  - Tax Payment
+  - Darf Payment
+  - Payment Preview
+  - Payment Request
+- name: Others
+  tags:
+  - Webhook
+  - Event
+  - Event Attempt
+  - Pix Key
+  - Institutions
+  - Public Key

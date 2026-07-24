@@ -1,0 +1,487 @@
+openapi: 3.1.0
+info:
+  title: Stark Bank Balance Merchant Purchase API
+  version: v2
+  description: 'This is our second API version. It is another small step towards launching the product we want to create for you, but it''s a giant leap for the brazilian financial market. We created the first banking API in Brazil and we are proud of it.
+
+    Our API is RESTFul. This means we use predictable, resource-oriented URLs to do banking operations. The API itself speaks exclusively in JSON, including errors, but our SDK libraries convert responses to appropriate language-specific objects.
+
+    Want to check our OpenAPI 3.1 specification? You can download our yaml file right here.
+
+    You can also try our Postman collection. Download it here.
+
+    '
+  contact:
+    name: Stark Bank Developers
+    email: help@starkbank.com
+    url: https://starkbank.com
+  license:
+    name: Stark Bank License
+servers:
+- url: https://api.starkbank.com
+  description: Production
+- url: https://sandbox.api.starkbank.com
+  description: Sandbox
+security:
+- digitalSignature: []
+tags:
+- name: Merchant Purchase
+  description: 'The Merchant Purchase resource can be used to charge customers with credit or debit cards.
+
+    If a card hasn''t been used before, a Merchant Session Purchase must be created and approved with that specific card before it can be used directly in a Merchant Purchase.
+
+    '
+paths:
+  /v2/merchant-purchase:
+    post:
+      summary: Create Merchant Purchase
+      operationId: create-merchantPurchase
+      tags:
+      - Merchant Purchase
+      description: 'This route is used to charge a card that has been previously saved.
+
+        Cards can only be used in this route once a previous purchase was approved through a Merchant Session Purchase.
+
+        '
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                amount:
+                  type: integer
+                  description: 'A non-negative integer that represents the amount in cents to be received. E.g: 100 (R$1.00)'
+                cardId:
+                  type: string
+                  description: The ID of the Merchant Card to be used for the purchase.
+                fundingType:
+                  type: string
+                  description: The type of funding to be used for the purchase. Options are "credit" and "debit".
+                billingCity:
+                  type: string
+                  description: The billing city associated with the card used for the purchase. Required if challengeMode is "enabled" and optional otherwise.
+                billingCountryCode:
+                  type: string
+                  description: The billing country code associated with the card used for the purchase. Required if challengeMode is "enabled" and optional otherwise.
+                billingStateCode:
+                  type: string
+                  description: The billing state code associated with the card used for the purchase. Required if challengeMode is "enabled" and optional otherwise.
+                billingStreetLine1:
+                  type: string
+                  description: The billing street address associated with the card used for the purchase. Required if challengeMode is "enabled" and optional otherwise.
+                billingStreetLine2:
+                  type: string
+                  description: The billing street address complement associated with the card used for the purchase. Required if challengeMode is "enabled" and optional otherwise.
+                billingZipCode:
+                  type: string
+                  description: The billing zip code associated with the card used for the purchase. Required if challengeMode is "enabled" and optional otherwise.
+                challengeMode:
+                  type: string
+                  description: 'Defines whether or not a holder verification (3DS) will be used when authorizing the purchase. Options are "enabled" and "disabled". Default: "enabled"'
+                holderEmail:
+                  type: string
+                  description: The email associated with the holder of the card used for the purchase. Required if challengeMode is "enabled" and optional otherwise.
+                holderPhone:
+                  type: string
+                  description: The phone number associated with the holder of the card used for the purchase. Required if challengeMode is "enabled" and optional otherwise.
+                installmentCount:
+                  type: string
+                  description: 'A non-negative integer that represents the number of purchase installments. Default: 1'
+                metadata:
+                  type: string
+                  description: 'An object containing additional data related to the purchase. If 3DS is enabled, the following fields related to the buyer''s device are required: userAgent, timezoneOffset, userIp, language.'
+              required:
+              - amount
+              - cardId
+              - fundingType
+              - billingCity
+              - billingCountryCode
+              - billingStateCode
+              - billingStreetLine1
+              - billingStreetLine2
+              - billingZipCode
+              - holderEmail
+              - holderPhone
+              - metadata
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+    get:
+      summary: List Merchant Purchases
+      operationId: list-merchantPurchase
+      tags:
+      - Merchant Purchase
+      description: Get a list of merchant purchases in chunks of at most 100. If you need smaller chunks, use the limit parameter.
+      parameters:
+      - name: after
+        in: query
+        description: Filter entities created after this date.
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: before
+        in: query
+        description: Filter entities created before this date.
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: cursor
+        in: query
+        description: String used to get the next batch of results. Our SDKs handle this for you.
+        required: false
+        schema:
+          type: string
+      - name: fields
+        in: query
+        description: List of strings to filter response JSON keys. Not available in the SDKs.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: ids
+        in: query
+        description: List of strings to get specific entities by ids.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: limit
+        in: query
+        description: Number of results per cursor. Max = 100.
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+      - name: status
+        in: query
+        description: 'Filter purchases by the specified status, such as: created, approved, denied, confirmed, paid, pending, canceled, voided, failed.'
+        required: false
+        schema:
+          type: string
+      - name: tags
+        in: query
+        description: Filter entities that contain the specified tags.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+  /v2/merchant-purchase/{id}:
+    patch:
+      summary: Update a Merchant Purchase
+      operationId: update-merchantPurchase-byId
+      tags:
+      - Merchant Purchase
+      description: Update a single purchase. If the purchase is currently approved, you can only update the status to canceled and set the amount to 0. This action cancels the authorization. If the purchase is currently confirmed, you can update the status to reversed and adjust the amount to a lower value. This action debits the difference and reverses the purchase, partially or totally. If the purchase is partially reversed, its status will remain confirmed. However, if the purchase is fully reversed, its status will be updated to voided.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                amount:
+                  type: integer
+                  description: 'New amount of the purchase. If the purchase is confirmed, this will debit and reverse the difference. If the purchase is authorized, only 0 is allowed and this will cancel the authorization. Example: 200 (R$2.00).'
+                status:
+                  type: string
+                  description: This can be used to cancel or reverse the purchase by passing 'canceled' or 'reversed' as the status patch.
+      parameters:
+      - name: id
+        in: path
+        description: Id of the purchase entity.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+    get:
+      summary: Get a Merchant Purchase
+      operationId: get-merchantPurchase-byId
+      tags:
+      - Merchant Purchase
+      description: Retrieve detailed information about a specific purchase by its id.
+      parameters:
+      - name: id
+        in: path
+        description: The unique identifier for the merchant purchase that needs to be retrieved.
+        required: true
+        schema:
+          type: string
+      - name: fields
+        in: query
+        description: List of strings to filter response JSON keys. Not available in the SDKs.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+  /v2/merchant-purchase/log:
+    get:
+      summary: List Merchant Purchase Logs
+      operationId: list-merchantPurchase-log
+      tags:
+      - Merchant Purchase
+      description: 'Get a paged list of merchant purchase logs.
+
+        A log tracks a change in the purchase entity according to its life cycle.
+
+        '
+      parameters:
+      - name: after
+        in: query
+        description: Filter entities created after this date.
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: before
+        in: query
+        description: Filter entities created before this date.
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: cursor
+        in: query
+        description: String used to get the next batch of results. Our SDKs handle this for you.
+        required: false
+        schema:
+          type: string
+      - name: fields
+        in: query
+        description: List of strings to filter response JSON keys. Not available in the SDKs.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: limit
+        in: query
+        description: Number of results per cursor. Max = 100.
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+      - name: purchaseIds
+        in: query
+        description: Filter the merchant purchase ids to only include its corresponding logs
+        required: false
+        schema:
+          type: string
+      - name: types
+        in: query
+        description: Filters logs by log types.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+  /v2/merchant-purchase/log/{id}:
+    get:
+      summary: Get a Merchant Purchase Log
+      operationId: get-merchantPurchase-log-byId
+      tags:
+      - Merchant Purchase
+      description: Get a single merchant purchase log by its id.
+      parameters:
+      - name: id
+        in: path
+        description: The unique identifier for the merchant purchase that needs to be retrieved.
+        required: true
+        schema:
+          type: string
+      - name: fields
+        in: query
+        description: List of strings to filter response JSON keys. Not available in the SDKs.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+components:
+  schemas:
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code string
+        message:
+          type: string
+          description: Human-readable error message
+  securitySchemes:
+    digitalSignature:
+      type: apiKey
+      name: Digital-Signature
+      in: header
+      description: ECDSA digital signature for request authentication
+externalDocs:
+  url: https://docs.starkbank.com/api
+  description: Stark Bank API documentation
+x-tagGroups:
+- name: Business Account
+  tags:
+  - Workspace
+  - Balance
+  - Transaction
+- name: Cash Receivables
+  tags:
+  - Invoice
+  - Dynamic Brcode
+  - Deposit
+  - Boleto
+  - Boleto Holmes
+  - Split
+  - Split Receiver
+  - Split Profile
+- name: Cash Subscription
+  tags:
+  - Invoice Pull Subscription
+  - Invoice Pull Request
+- name: Card Receivables
+  tags:
+  - Merchant Session
+  - Merchant Purchase
+  - Merchant Card
+  - Merchant Installment
+- name: Bill Payments
+  tags:
+  - Transfer
+  - Brcode Payment
+  - Boleto Payment
+  - Utility Payment
+  - Tax Payment
+  - Darf Payment
+  - Payment Preview
+  - Payment Request
+- name: Others
+  tags:
+  - Webhook
+  - Event
+  - Event Attempt
+  - Pix Key
+  - Institutions
+  - Public Key

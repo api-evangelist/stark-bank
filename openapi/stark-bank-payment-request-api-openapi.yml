@@ -1,0 +1,262 @@
+openapi: 3.1.0
+info:
+  title: Stark Bank Balance Payment Request API
+  version: v2
+  description: 'This is our second API version. It is another small step towards launching the product we want to create for you, but it''s a giant leap for the brazilian financial market. We created the first banking API in Brazil and we are proud of it.
+
+    Our API is RESTFul. This means we use predictable, resource-oriented URLs to do banking operations. The API itself speaks exclusively in JSON, including errors, but our SDK libraries convert responses to appropriate language-specific objects.
+
+    Want to check our OpenAPI 3.1 specification? You can download our yaml file right here.
+
+    You can also try our Postman collection. Download it here.
+
+    '
+  contact:
+    name: Stark Bank Developers
+    email: help@starkbank.com
+    url: https://starkbank.com
+  license:
+    name: Stark Bank License
+servers:
+- url: https://api.starkbank.com
+  description: Production
+- url: https://sandbox.api.starkbank.com
+  description: Sandbox
+security:
+- digitalSignature: []
+tags:
+- name: Payment Request
+  description: 'Here we will teach you how to create and manage your payment requests. The payment request is the main element of our approval flow, which can be checked out by logging into our Web Banking.
+
+    The requests are bound to their respective cost centers and represent requests to execute specific payments, which can be transfers, boleto payments, etc. Expect more payment options to be introduced!
+
+    '
+paths:
+  /v2/payment-request:
+    post:
+      summary: Create Payment Requests
+      operationId: create-paymentRequest
+      tags:
+      - Payment Request
+      description: Use this route to create new payment requests in our Web Banking approval flow.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                centerId:
+                  type: string
+                  description: 'Unique ID of the targeted cost center. You can check out the cost center ID directly on its approval section on our Web Banking. Example: 5656565656565656'
+                payment:
+                  type: string
+                  description: JSON specifying the requested payment. The payment JSON is the same as those passed in the requests that create the payments without going through the approval flow (see transfer and boleto payment). The only exception is that the "scheduled" parameter cannot be sent on these JSONs, as the PaymentRequest "due" parameter already serves this purpose. The SDKs also accept their respective objects instead of JSONs.
+                due:
+                  type: string
+                  format: date-time
+                  description: 'Suggested payment date. This parameter may be altered by the controllers of the cost center. Default is today. Example: "2020-08-01"'
+                tags:
+                  type: array
+                  items:
+                    type: string
+                  description: Array of strings to tag the entity for future queries. All tags will be converted to lowercase.
+                type:
+                  type: string
+                  description: 'Payment type. The SDKs will take care of this parameter for you if you use their specialized objects. But if you pass a dictionary in payment parameter you need to inform its type. Examples: "transfer", "brcode-payment", "boleto-payment", "utility-payment".'
+              required:
+              - centerId
+              - payment
+              - type
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+    get:
+      summary: List Payment Requests
+      operationId: list-paymentRequest
+      tags:
+      - Payment Request
+      description: Here you can list and filter payment requests created by the requesting user. We return it paged.
+      parameters:
+      - name: centerId
+        in: query
+        description: 'Unique ID of the targeted cost center. You can check out the cost center ID directly on its approval section on our Web Banking. Example: 5656565656565656'
+        required: true
+        schema:
+          type: string
+      - name: after
+        in: query
+        description: Filter entities created after this date.
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: before
+        in: query
+        description: Filter entities created before this date.
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: cursor
+        in: query
+        description: String used to get the next batch of results. Our SDKs handle this for you.
+        required: false
+        schema:
+          type: string
+      - name: fields
+        in: query
+        description: List of strings to filter response JSON keys. Not available in the SDKs.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: ids
+        in: query
+        description: List of strings to get specific entities by ids.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: limit
+        in: query
+        description: Number of results per cursor. Max = 100.
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+      - name: sort
+        in: query
+        description: 'Sort order considered in the response. Options are: "created", "-created", "updated" and "-updated". "-" means descending order. Default is "-created".'
+        required: false
+        schema:
+          type: string
+      - name: status
+        in: query
+        description: 'Filter payment requests by the specified status. Example: success'
+        required: false
+        schema:
+          type: string
+      - name: tags
+        in: query
+        description: Filter entities that contain the specified tags.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: type
+        in: query
+        description: 'Filters payment requests by the type inferred from the payment parameter, if it is not a dictionary. Example: boleto-payment'
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+components:
+  schemas:
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code string
+        message:
+          type: string
+          description: Human-readable error message
+  securitySchemes:
+    digitalSignature:
+      type: apiKey
+      name: Digital-Signature
+      in: header
+      description: ECDSA digital signature for request authentication
+externalDocs:
+  url: https://docs.starkbank.com/api
+  description: Stark Bank API documentation
+x-tagGroups:
+- name: Business Account
+  tags:
+  - Workspace
+  - Balance
+  - Transaction
+- name: Cash Receivables
+  tags:
+  - Invoice
+  - Dynamic Brcode
+  - Deposit
+  - Boleto
+  - Boleto Holmes
+  - Split
+  - Split Receiver
+  - Split Profile
+- name: Cash Subscription
+  tags:
+  - Invoice Pull Subscription
+  - Invoice Pull Request
+- name: Card Receivables
+  tags:
+  - Merchant Session
+  - Merchant Purchase
+  - Merchant Card
+  - Merchant Installment
+- name: Bill Payments
+  tags:
+  - Transfer
+  - Brcode Payment
+  - Boleto Payment
+  - Utility Payment
+  - Tax Payment
+  - Darf Payment
+  - Payment Preview
+  - Payment Request
+- name: Others
+  tags:
+  - Webhook
+  - Event
+  - Event Attempt
+  - Pix Key
+  - Institutions
+  - Public Key

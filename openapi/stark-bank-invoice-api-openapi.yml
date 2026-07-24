@@ -1,0 +1,658 @@
+openapi: 3.1.0
+info:
+  title: Stark Bank Balance Invoice API
+  version: v2
+  description: 'This is our second API version. It is another small step towards launching the product we want to create for you, but it''s a giant leap for the brazilian financial market. We created the first banking API in Brazil and we are proud of it.
+
+    Our API is RESTFul. This means we use predictable, resource-oriented URLs to do banking operations. The API itself speaks exclusively in JSON, including errors, but our SDK libraries convert responses to appropriate language-specific objects.
+
+    Want to check our OpenAPI 3.1 specification? You can download our yaml file right here.
+
+    You can also try our Postman collection. Download it here.
+
+    '
+  contact:
+    name: Stark Bank Developers
+    email: help@starkbank.com
+    url: https://starkbank.com
+  license:
+    name: Stark Bank License
+servers:
+- url: https://api.starkbank.com
+  description: Production
+- url: https://sandbox.api.starkbank.com
+  description: Sandbox
+security:
+- digitalSignature: []
+tags:
+- name: Invoice
+  description: 'The Invoice resource is used to request payments from customers.
+
+    Your customer can pay it by scanning the Pix QR Code or making a deposit to the indicated account number.
+
+    You can set custom fields as fine, interest, overdue date and expiration date, for a complete charge method, much better than boleto.
+
+    If you''re used to our Boleto resource, you will feel pretty familiar with the Invoice flow. In this section, we will teach you how to create and manage your Pix invoices.
+
+    You can also split the Invoice between different receivers, you need to create a Split Receiver, and add the receiver into the Splits array.
+
+    '
+paths:
+  /v2/invoice:
+    post:
+      summary: Create Invoices
+      operationId: create-invoice
+      tags:
+      - Invoice
+      description: 'Use this route to create up to 100 new invoices at a time.
+
+        NOTE:If you create an invoice with amount zero, we will accept any amount paid by your customer. Otherwise we will only accept the amount specified in the invoice.
+
+        '
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                amount:
+                  type: integer
+                  description: 'A non-negative integer that represents the amount in cents to be invoiced. When the invoice is paid, this parameter is updated with the amount actually paid. Example: 100 (R$1.00)'
+                name:
+                  type: string
+                  description: 'Payer full name. Example: "Anthony Edward Stark"'
+                taxId:
+                  type: string
+                  description: 'Payer CPF (11 digits formatted or unformatted) or CNPJ (14 digits formatted or unformatted). Example: 012.345.678-90'
+                descriptions:
+                  type: array
+                  items:
+                    type: object
+                  description: 'List of up to 15 descriptions containing information to help the customer understand why he is being charged. For each description, you can add a title key and a description value. Example:
+
+                    [{"key": "Product A", "value": "R$10,00"}, {"key": "Taxes", "value": "R$100,00"}]
+
+                    '
+                discounts:
+                  type: array
+                  items:
+                    type: object
+                  description: 'List of up to 5 discounts specifying the discount percentage and the limit date up to when the discount is valid. Example:
+
+                    [{"percentage": 5, "due": "2020-11-25T17:59:26.000000+00:00"}, {"percentage": 10.5, "due": "2020-10-25T17:59:26.000000+00:00"}]
+
+                    '
+                due:
+                  type: string
+                  format: date-time
+                  description: 'Requested payment due datetime in ISO format. Example: "2020-11-25T17:59:26.000000+00:00". Default value: 2 days after creation.'
+                expiration:
+                  type: integer
+                  description: 'Time in seconds counted from the due datetime until the invoice expires. After expiration, the invoice cannot be paid anymore. Default value: 5097600 (59 days)'
+                fine:
+                  type: number
+                  format: float
+                  description: Percentage of the invoice amount charged if customer pays after the due datetime. Default value = 2.00 (2%)
+                interest:
+                  type: number
+                  format: float
+                  description: Monthly interest, in percentage, charged if customer pays after the due datetime. Default value = 1.00 (1%)
+                rules:
+                  type: array
+                  items:
+                    type: string
+                  description: 'List of rules for modifying invoice behavior. Example:
+
+                    [{"key": "allowedTaxIds", "value": ["012.345.678-90", "45.059.493/0001-73"]}]
+
+                    '
+                splits:
+                  type: array
+                  items:
+                    type: object
+                  description: 'Array of Split objects to indicate payment receivers. Example:
+
+                    [{"receiverId": "5742447426535424", "amount": 100}, {"receiverId": "5743243941642240", "amount": 200}]
+
+                    '
+                tags:
+                  type: array
+                  items:
+                    type: string
+                  description: Array of strings to tag the entity for future queries. All tags will be converted to lowercase.
+              required:
+              - amount
+              - name
+              - taxId
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+    get:
+      summary: List Invoices
+      operationId: list-invoice
+      tags:
+      - Invoice
+      description: Get a list of invoices in chunks of at most 100. If you need smaller chunks, use the limit parameter.
+      parameters:
+      - name: after
+        in: query
+        description: Filter entities created after this date.
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: before
+        in: query
+        description: Filter entities created before this date.
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: cursor
+        in: query
+        description: String used to get the next batch of results. Our SDKs handle this for you.
+        required: false
+        schema:
+          type: string
+      - name: fields
+        in: query
+        description: List of strings to filter response JSON keys. Not available in the SDKs.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: ids
+        in: query
+        description: List of strings to get specific entities by ids.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: limit
+        in: query
+        description: Number of results per cursor. Max = 100.
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+      - name: status
+        in: query
+        description: Filter invoices by the specified status.
+        required: false
+        schema:
+          type: string
+      - name: tags
+        in: query
+        description: Filter entities that contain the specified tags.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: transactionIds
+        in: query
+        description: List of transaction IDs linked to the desired invoices.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+  /v2/invoice/{id}:
+    get:
+      summary: Get an Invoice
+      operationId: get-invoice-byId
+      tags:
+      - Invoice
+      description: Get a single invoice by its id.
+      parameters:
+      - name: id
+        in: path
+        description: Id of the invoice entity
+        required: true
+        schema:
+          type: string
+      - name: fields
+        in: query
+        description: List of strings to filter response JSON keys. Not available in the SDKs.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+    patch:
+      summary: Update an Invoice
+      operationId: update-invoice-byId
+      tags:
+      - Invoice
+      description: Update a single invoice. If the invoice has not yet been paid, you can adjust parameters such as the requested amount, the due datetime and the expiration. If the invoice has already been paid, only the amount can be decreased, which will result in a payment reversal.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                amount:
+                  type: integer
+                  description: 'New amount that should be charged on payment. If the invoice has already been paid, it is the final amount after reversal. Example: 200 (R$2.00).'
+                due:
+                  type: string
+                  format: date-time
+                  description: 'New due datetime. Example: ''2020-11-26T17:59:26.000000+00:00''.'
+                expiration:
+                  type: integer
+                  description: 'New expiration. Example: 3600 (1 hour).'
+                status:
+                  type: string
+                  description: This can be used to cancel the invoice by passing 'canceled' as the status patch.
+      parameters:
+      - name: id
+        in: path
+        description: Id of the invoice entity.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+  /v2/invoice/{id}/qrcode:
+    get:
+      summary: Get an Invoice QR Code
+      operationId: get-invoice-byId-qrcode
+      tags:
+      - Invoice
+      description: Get the invoice QR Code png file. Similarly to the Boleto PDF, we create a QR Code image file with the invoice data so that your customer can pay it through Pix.
+      parameters:
+      - name: id
+        in: path
+        description: Id of the invoice entity.
+        required: true
+        schema:
+          type: string
+      - name: size
+        in: query
+        description: Number of pixels in each 'box' of the QR code. Minimum = 1 and maximum = 50. Default value = 7.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+  /v2/invoice/{id}/pdf:
+    get:
+      summary: Get an Invoice PDF
+      operationId: get-invoice-byId-pdf
+      tags:
+      - Invoice
+      description: Get the invoice PDF file. Similarly to the Boleto PDF, we create a PDF file with the invoice data and the QR Code so that your customer can pay it through Pix. The same PDF can also be accessed by the public "pdf" parameter returned in the Invoice JSON. This link is the one you should send to your customers.
+      parameters:
+      - name: id
+        in: path
+        description: Id of the invoice entity.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+  /v2/invoice/log:
+    get:
+      summary: List Invoice Logs
+      operationId: list-invoice-log
+      tags:
+      - Invoice
+      description: Get a paged list of invoice logs. A log tracks a change in the invoice entity according to its life cycle.
+      parameters:
+      - name: after
+        in: query
+        description: Filter entities created after this date.
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: before
+        in: query
+        description: Filter entities created before this date.
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: cursor
+        in: query
+        description: String used to get the next batch of results. Our SDKs handle this for you.
+        required: false
+        schema:
+          type: string
+      - name: fields
+        in: query
+        description: List of strings to filter response JSON keys. Not available in the SDKs.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: invoiceIds
+        in: query
+        description: Array of invoice ids that are linked to the logs you desire.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: limit
+        in: query
+        description: Number of results per cursor. Max = 100.
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+      - name: types
+        in: query
+        description: Filters logs by log types.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+  /v2/invoice/log/{id}:
+    get:
+      summary: Get an Invoice Log
+      operationId: get-invoice-log-byId
+      tags:
+      - Invoice
+      description: Get a single invoice Log by its id.
+      parameters:
+      - name: id
+        in: path
+        description: Id of the log entity.
+        required: true
+        schema:
+          type: string
+      - name: fields
+        in: query
+        description: List of strings to filter response JSON keys. Not available in the SDKs.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+  /v2/invoice/log/{id}/pdf:
+    get:
+      summary: Get a reversed Invoice Log PDF
+      operationId: get-invoice-log-byId-pdf
+      tags:
+      - Invoice
+      description: Whenever an Invoice is successfully reversed, a reversed log will be created. To retrieve a specific reversal receipt, you can request the corresponding log PDF.
+      parameters:
+      - name: id
+        in: path
+        description: Id of the log invoice entity.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+  /v2/invoice/{id}/payment:
+    get:
+      summary: Get an Invoice Payment information
+      operationId: get-invoice-byId-payment
+      tags:
+      - Invoice
+      description: Once an invoice has been paid, you can get the payment information using the Invoice. Payment sub-resource.
+      parameters:
+      - name: id
+        in: path
+        description: Id of the invoice entity.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+components:
+  schemas:
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code string
+        message:
+          type: string
+          description: Human-readable error message
+  securitySchemes:
+    digitalSignature:
+      type: apiKey
+      name: Digital-Signature
+      in: header
+      description: ECDSA digital signature for request authentication
+externalDocs:
+  url: https://docs.starkbank.com/api
+  description: Stark Bank API documentation
+x-tagGroups:
+- name: Business Account
+  tags:
+  - Workspace
+  - Balance
+  - Transaction
+- name: Cash Receivables
+  tags:
+  - Invoice
+  - Dynamic Brcode
+  - Deposit
+  - Boleto
+  - Boleto Holmes
+  - Split
+  - Split Receiver
+  - Split Profile
+- name: Cash Subscription
+  tags:
+  - Invoice Pull Subscription
+  - Invoice Pull Request
+- name: Card Receivables
+  tags:
+  - Merchant Session
+  - Merchant Purchase
+  - Merchant Card
+  - Merchant Installment
+- name: Bill Payments
+  tags:
+  - Transfer
+  - Brcode Payment
+  - Boleto Payment
+  - Utility Payment
+  - Tax Payment
+  - Darf Payment
+  - Payment Preview
+  - Payment Request
+- name: Others
+  tags:
+  - Webhook
+  - Event
+  - Event Attempt
+  - Pix Key
+  - Institutions
+  - Public Key

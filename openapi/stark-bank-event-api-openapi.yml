@@ -1,0 +1,295 @@
+openapi: 3.1.0
+info:
+  title: Stark Bank Balance Event API
+  version: v2
+  description: 'This is our second API version. It is another small step towards launching the product we want to create for you, but it''s a giant leap for the brazilian financial market. We created the first banking API in Brazil and we are proud of it.
+
+    Our API is RESTFul. This means we use predictable, resource-oriented URLs to do banking operations. The API itself speaks exclusively in JSON, including errors, but our SDK libraries convert responses to appropriate language-specific objects.
+
+    Want to check our OpenAPI 3.1 specification? You can download our yaml file right here.
+
+    You can also try our Postman collection. Download it here.
+
+    '
+  contact:
+    name: Stark Bank Developers
+    email: help@starkbank.com
+    url: https://starkbank.com
+  license:
+    name: Stark Bank License
+servers:
+- url: https://api.starkbank.com
+  description: Production
+- url: https://sandbox.api.starkbank.com
+  description: Sandbox
+security:
+- digitalSignature: []
+tags:
+- name: Event
+  description: 'Every time a log is created, a corresponding event will be generated and sent to you by webhook, if the appropriate subscription was set. Therefore, the event represents an occurrence in your workspace.
+
+    NOTE: All the events have a log property containing an entity log. The nature of the log, however, may change according to the subscription that triggered the event. For example, if the subscription is transfer, the log in the event will be a TransferLog. If the subscription is boleto, the log in the event will be a BoletoLog, and so on.
+
+    '
+paths:
+  /v2/event:
+    get:
+      summary: List Events
+      operationId: list-event
+      tags:
+      - Event
+      description: Get a list of non-deleted events in chunks of at most 100. If you need smaller chunks, use the limit parameter.
+      parameters:
+      - name: after
+        in: query
+        description: 'Date filter for Events created only after a specific date. Example: "2022-01-20"'
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: before
+        in: query
+        description: 'Date filter for Events created only before a specific date. Example: "2022-02-20"'
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: cursor
+        in: query
+        description: String used to get the next batch of results. Our SDKs handle this for you.
+        required: false
+        schema:
+          type: string
+      - name: fields
+        in: query
+        description: List of strings to filter response JSON keys. Not available in the SDKs.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: isDelivered
+        in: query
+        description: If false, only gets Events that haven't been delivered. If true, only gets Events that have already been delivered.
+        required: false
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Maximum number of Events to be retrieved. Max = 100.
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+  /v2/event/{id}:
+    get:
+      summary: Get an Event
+      operationId: get-event-byId
+      tags:
+      - Event
+      description: Get a single Event by its id.
+      parameters:
+      - name: id
+        in: path
+        description: Unique id of the event entity.
+        required: true
+        schema:
+          type: string
+      - name: fields
+        in: query
+        description: List of strings to filter response JSON keys. Not available in the SDKs.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+    delete:
+      summary: Delete an Event
+      operationId: delete-event-byId
+      tags:
+      - Event
+      description: 'Delete a single Event from the event list.
+
+        Note: This action cannot be undone.
+
+        '
+      parameters:
+      - name: id
+        in: path
+        description: Id of the Event entity to be canceled.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successfully deleted
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+    patch:
+      summary: Update an event
+      operationId: update-event-byId
+      tags:
+      - Event
+      description: The only information you can update in an Event is the isDelivered property. This can be useful when, after experiencing server downtime on your side, you list all events with isDelivered=false, process them, and then set them as delivered to stabilize your operations.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                isDelivered:
+                  type: string
+                  description: Bool signaling if the Event has or hasn't been successfully delivered.
+              required:
+              - isDelivered
+      parameters:
+      - name: id
+        in: path
+        description: 'Id of the event entity. Example: "5719405850615809"'
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+components:
+  schemas:
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code string
+        message:
+          type: string
+          description: Human-readable error message
+  securitySchemes:
+    digitalSignature:
+      type: apiKey
+      name: Digital-Signature
+      in: header
+      description: ECDSA digital signature for request authentication
+externalDocs:
+  url: https://docs.starkbank.com/api
+  description: Stark Bank API documentation
+x-tagGroups:
+- name: Business Account
+  tags:
+  - Workspace
+  - Balance
+  - Transaction
+- name: Cash Receivables
+  tags:
+  - Invoice
+  - Dynamic Brcode
+  - Deposit
+  - Boleto
+  - Boleto Holmes
+  - Split
+  - Split Receiver
+  - Split Profile
+- name: Cash Subscription
+  tags:
+  - Invoice Pull Subscription
+  - Invoice Pull Request
+- name: Card Receivables
+  tags:
+  - Merchant Session
+  - Merchant Purchase
+  - Merchant Card
+  - Merchant Installment
+- name: Bill Payments
+  tags:
+  - Transfer
+  - Brcode Payment
+  - Boleto Payment
+  - Utility Payment
+  - Tax Payment
+  - Darf Payment
+  - Payment Preview
+  - Payment Request
+- name: Others
+  tags:
+  - Webhook
+  - Event
+  - Event Attempt
+  - Pix Key
+  - Institutions
+  - Public Key

@@ -1,0 +1,482 @@
+openapi: 3.1.0
+info:
+  title: Stark Bank Balance Invoice Pull Subscription API
+  version: v2
+  description: 'This is our second API version. It is another small step towards launching the product we want to create for you, but it''s a giant leap for the brazilian financial market. We created the first banking API in Brazil and we are proud of it.
+
+    Our API is RESTFul. This means we use predictable, resource-oriented URLs to do banking operations. The API itself speaks exclusively in JSON, including errors, but our SDK libraries convert responses to appropriate language-specific objects.
+
+    Want to check our OpenAPI 3.1 specification? You can download our yaml file right here.
+
+    You can also try our Postman collection. Download it here.
+
+    '
+  contact:
+    name: Stark Bank Developers
+    email: help@starkbank.com
+    url: https://starkbank.com
+  license:
+    name: Stark Bank License
+servers:
+- url: https://api.starkbank.com
+  description: Production
+- url: https://sandbox.api.starkbank.com
+  description: Sandbox
+security:
+- digitalSignature: []
+tags:
+- name: Invoice Pull Subscription
+  description: 'An Invoice Pull Subscription is a recurring payment agreement between a payer and a receiver, authorized through the Pix Automatic infrastructure. Once active, it allows the receiver to periodically trigger automatic debits by issuing invoices that match the agreed conditions such as amount, frequency, and billing cycle without requiring new consent for each transaction.
+
+    You can use asynchronous webhooks to monitor status changes.
+
+    '
+paths:
+  /v2/invoice-pull-subscription:
+    post:
+      summary: Create Invoice Pull Subscriptions
+      operationId: create-invoicePullSubscription
+      tags:
+      - Invoice Pull Subscription
+      description: Use this route to create new invoice pull subscriptions.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                displayDescription:
+                  type: string
+                  description: Description to be presented to the payer.
+                externalId:
+                  type: string
+                  description: Safe string that must be unique among all your Invoice PullSubscriptions to prevent duplicates.
+                interval:
+                  type: string
+                  description: Cycle definition of the Invoice Pull Requests. Options are "week", "month", "quarter", "semester" and "year".
+                name:
+                  type: string
+                  description: Name of the debtor.
+                pullMode:
+                  type: string
+                  description: Defines if the invoice pull requests will be made automatically by Stark Bank or manually by the company.
+                pullRetryLimit:
+                  type: string
+                  description: Defines how many times the receiver is able to create Invoice Pull Requests for retries. Options are "0" and "3".
+                referenceCode:
+                  type: string
+                  description: Safe string that must be unique among all your Pix Subscriptions and represent a contract.
+                start:
+                  type: string
+                  description: Expected date to settle the first Invoice Pull Request.
+                taxId:
+                  type: string
+                  description: Tax id of the debtor.
+                type:
+                  type: string
+                  description: 'Subscription journey type. Options: "push", "qrcode", "qrcodeAndPayment" or "paymentAndOrQrCode".'
+                amount:
+                  type: integer
+                  description: Fixed amount to be charged every cycle. Required if the subscription has a fixed amount.
+                amountMinLimit:
+                  type: string
+                  description: Minimum amount limit that the payer can set to be charged every cycle. Required if the subscription has a variable amount.
+                data:
+                  type: string
+                  description: 'Additional data required for some types of invoice pull subscription.
+
+                    For the push type, this field sets the payer''s account details. For the qrcodeAndPayment or paymentAndOrQrCode types, this field sets the immediate payment parameters. This field is not required for the qrcode type.
+
+                    '
+                due:
+                  type: string
+                  format: date-time
+                  description: Due date for answering with an approval or denial. If not provided, defaults to 2 days after creation.
+                end:
+                  type: string
+                  description: Determines the final date of the subscription.
+                tags:
+                  type: array
+                  items:
+                    type: string
+                  description: Array of strings to tag the entity for future queries. All tags will be converted to lowercase.
+              required:
+              - displayDescription
+              - externalId
+              - interval
+              - name
+              - pullMode
+              - pullRetryLimit
+              - referenceCode
+              - start
+              - taxId
+              - type
+              - amount
+              - amountMinLimit
+              - data
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+    get:
+      summary: List Invoice Pull Subscriptions
+      operationId: list-invoicePullSubscription
+      tags:
+      - Invoice Pull Subscription
+      description: Here you can list and filter all invoice pull subscriptions you have made. We return it paged.
+      parameters:
+      - name: after
+        in: query
+        description: Filter entities created after this date.
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: before
+        in: query
+        description: Filter entities created before this date.
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: cursor
+        in: query
+        description: String used to get the next batch of results. Our SDKs handle this for you.
+        required: false
+        schema:
+          type: string
+      - name: expand
+        in: query
+        description: 'List of strings to expand the invoice pull subscription information. Options: "data".'
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: fields
+        in: query
+        description: List of strings to filter response JSON keys. Not available in the SDKs.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: ids
+        in: query
+        description: List of strings to get specific entities by ids.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: limit
+        in: query
+        description: Number of results per cursor. Max = 100.
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+      - name: status
+        in: query
+        description: Filter invoice pull subscriptions by the specified status.
+        required: false
+        schema:
+          type: string
+      - name: tags
+        in: query
+        description: Filter entities that contain the specified tags.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+  /v2/invoice-pull-subscription/{id}:
+    get:
+      summary: Get an Invoice Pull Subscription
+      operationId: get-invoicePullSubscription-byId
+      tags:
+      - Invoice Pull Subscription
+      description: Get a single invoice pull subscription by its id.
+      parameters:
+      - name: id
+        in: path
+        description: String used to get the specific invoice pull subscription by its ID.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+    delete:
+      summary: Cancel an Invoice Pull Subscription
+      operationId: delete-invoicePullSubscription-byId
+      tags:
+      - Invoice Pull Subscription
+      description: Cancel an existing invoice pull subscription. The subscription must be with "active" status to be canceled.
+      parameters:
+      - name: id
+        in: path
+        description: String used to get the specific invoice pull subscription by its ID.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successfully deleted
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+  /v2/invoice-pull-subscription/log:
+    get:
+      summary: List Invoice Pull Subscription Logs
+      operationId: list-invoicePullSubscription-log
+      tags:
+      - Invoice Pull Subscription
+      description: Get a paged list of invoice pull subscription logs. A log tracks a change in the entity according to its life cycle.
+      parameters:
+      - name: after
+        in: query
+        description: Filter entities created after this date.
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: before
+        in: query
+        description: Filter entities created before this date.
+        required: false
+        schema:
+          type: string
+          format: date
+      - name: cursor
+        in: query
+        description: String used to get the next batch of results. Our SDKs handle this for you.
+        required: false
+        schema:
+          type: string
+      - name: fields
+        in: query
+        description: List of strings to filter response JSON keys. Not available in the SDKs.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: limit
+        in: query
+        description: Number of results per cursor. Max = 100.
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+      - name: subscriptionIds
+        in: query
+        description: List of strings to get specific entities by ids.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: tags
+        in: query
+        description: Filter entities that contain the specified tags.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: types
+        in: query
+        description: Filter logs by log types.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+  /v2/invoice-pull-subscription/log/{id}:
+    get:
+      summary: Get an Invoice Pull Subscription Log
+      operationId: get-invoicePullSubscription-log-byId
+      tags:
+      - Invoice Pull Subscription
+      description: Get a single invoice pull subscription log by its id.
+      parameters:
+      - name: id
+        in: path
+        description: String used to get the specific invoice pull subscription log by its ID.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+components:
+  schemas:
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code string
+        message:
+          type: string
+          description: Human-readable error message
+  securitySchemes:
+    digitalSignature:
+      type: apiKey
+      name: Digital-Signature
+      in: header
+      description: ECDSA digital signature for request authentication
+externalDocs:
+  url: https://docs.starkbank.com/api
+  description: Stark Bank API documentation
+x-tagGroups:
+- name: Business Account
+  tags:
+  - Workspace
+  - Balance
+  - Transaction
+- name: Cash Receivables
+  tags:
+  - Invoice
+  - Dynamic Brcode
+  - Deposit
+  - Boleto
+  - Boleto Holmes
+  - Split
+  - Split Receiver
+  - Split Profile
+- name: Cash Subscription
+  tags:
+  - Invoice Pull Subscription
+  - Invoice Pull Request
+- name: Card Receivables
+  tags:
+  - Merchant Session
+  - Merchant Purchase
+  - Merchant Card
+  - Merchant Installment
+- name: Bill Payments
+  tags:
+  - Transfer
+  - Brcode Payment
+  - Boleto Payment
+  - Utility Payment
+  - Tax Payment
+  - Darf Payment
+  - Payment Preview
+  - Payment Request
+- name: Others
+  tags:
+  - Webhook
+  - Event
+  - Event Attempt
+  - Pix Key
+  - Institutions
+  - Public Key
