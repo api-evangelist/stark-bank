@@ -1,0 +1,65 @@
+generated: '2026-07-21'
+method: searched
+source: https://docs.starkbank.com/api (SDKs section) + public package registries
+packages:
+- language: python
+  registry: pypi
+  name: starkbank
+  url: https://pypi.org/project/starkbank/
+  install: pip install starkbank
+  repo: https://github.com/starkbank/sdk-python
+  official: true
+- language: javascript
+  registry: npm
+  name: starkbank
+  url: https://www.npmjs.com/package/starkbank
+  install: npm install starkbank
+  repo: https://github.com/starkbank/sdk-node
+  official: true
+- language: ruby
+  registry: rubygems
+  name: starkbank
+  url: https://rubygems.org/gems/starkbank
+  install: gem install starkbank
+  repo: https://github.com/starkbank/sdk-ruby
+  official: true
+- language: php
+  registry: packagist
+  name: starkbank/sdk
+  url: https://packagist.org/packages/starkbank/sdk
+  install: composer require starkbank/sdk
+  repo: https://github.com/starkbank/sdk-php
+  official: true
+- language: dotnet
+  registry: nuget
+  name: starkbank
+  url: https://www.nuget.org/packages/starkbank
+  install: dotnet add package starkbank
+  repo: https://github.com/starkbank/sdk-dotnet
+  official: true
+- language: java
+  registry: maven-central
+  name: com.starkbank:sdk
+  url: https://search.maven.org/search?q=g:com.starkbank
+  repo: https://github.com/starkbank/sdk-java
+  official: true
+- language: go
+  registry: pkg.go.dev
+  name: github.com/starkbank/sdk-go
+  url: https://pkg.go.dev/github.com/starkbank/sdk-go
+  install: go get github.com/starkbank/sdk-go
+  repo: https://github.com/starkbank/sdk-go
+  official: true
+- language: elixir
+  registry: hex
+  name: starkbank
+  url: https://hex.pm/packages/starkbank
+  install: 'mix deps: {:starkbank, "~> 2.0"}'
+  repo: https://github.com/starkbank/sdk-elixir
+  official: true
+- language: clojure
+  registry: clojars
+  name: starkbank
+  url: https://clojars.org/starkbank
+  repo: https://github.com/starkbank/sdk-clojure
+  official: true

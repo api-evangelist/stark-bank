@@ -1,0 +1,38 @@
+generated: '2026-07-21'
+method: searched
+source: >-
+  https://docs.starkbank.com/get-started/webhook +
+  openapi/stark-bank-openapi-original.yml (create-webhook subscriptions)
+spec_type: Webhooks
+note: >-
+  Stark Bank publishes no AsyncAPI document. It exposes a subscription-based
+  webhook surface: you register a URL and a set of subscriptions via create-webhook,
+  then receive signed Event objects. Event bodies are verified with the same ECDSA
+  scheme as API requests (Digital-Signature header); failed deliveries are retried
+  with exponential backoff and can be inspected via the Event Attempt resource.
+delivery:
+  transport: https-post
+  verification: ECDSA Digital-Signature header (verify before trusting body)
+  retries: exponential backoff
+  management_operations:
+  - create-webhook
+  - list-webhook
+  - get-webhook-byId
+  - delete-webhook-byId
+  - list-event
+  - get-event-byId
+  - update-event-byId
+  - delete-event-byId
+  - list-event-attempt
+  - get-event-attempt-byId
+subscriptions:
+- deposit
+- invoice
+- brcode-payment
+- transfer
+- utility-payment
+- boleto
+- boleto-payment
+- darf-payment
+- payment-request
+- boleto-holmes

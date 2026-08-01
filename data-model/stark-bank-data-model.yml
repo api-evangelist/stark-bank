@@ -1,0 +1,96 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/stark-bank-openapi-original.yml
+note: >-
+  Entity graph derived from the OpenAPI resource tags/operations and the id-log
+  pattern that runs through the API: nearly every money-movement resource has a
+  paired Log sub-resource and can be a webhook Event subject. Relationships reflect
+  the documented product structure (Receivables, Payables, Cards/Merchant, Split,
+  Webhooks).
+entities:
+- name: Workspace
+  domain: account
+  relationships:
+  - {type: has_one, target: Balance}
+  - {type: has_many, target: Transaction}
+- name: Balance
+  domain: account
+- name: Transaction
+  domain: account
+  note: ledger entry; every receivable/payable settles as a Transaction
+- name: Invoice
+  domain: receivables
+  relationships:
+  - {type: has_many, target: InvoiceLog, via: invoiceId}
+  - {type: has_one, target: DynamicBrcode}
+- name: DynamicBrcode
+  domain: receivables
+- name: Deposit
+  domain: receivables
+  relationships:
+  - {type: has_many, target: DepositLog, via: depositId}
+- name: Boleto
+  domain: receivables
+  relationships:
+  - {type: has_many, target: BoletoLog, via: boletoId}
+- name: BoletoHolmes
+  domain: receivables
+  note: investigates the status of a boleto
+- name: Split
+  domain: receivables
+  relationships:
+  - {type: belongs_to, target: SplitReceiver, via: receiverId}
+  - {type: belongs_to, target: SplitProfile}
+- name: SplitReceiver
+  domain: receivables
+- name: Transfer
+  domain: payables
+  relationships:
+  - {type: has_many, target: TransferLog, via: transferId}
+- name: BrcodePayment
+  domain: payables
+- name: BoletoPayment
+  domain: payables
+- name: UtilityPayment
+  domain: payables
+- name: TaxPayment
+  domain: payables
+- name: DarfPayment
+  domain: payables
+- name: PaymentRequest
+  domain: payables
+  note: routes a payment through Web Banking approval rules
+- name: PaymentPreview
+  domain: payables
+- name: MerchantSession
+  domain: cards
+  relationships:
+  - {type: has_many, target: MerchantPurchase, via: sessionUuid}
+- name: MerchantPurchase
+  domain: cards
+  relationships:
+  - {type: belongs_to, target: MerchantCard, via: cardId}
+  - {type: has_many, target: MerchantInstallment, via: purchaseId}
+- name: MerchantCard
+  domain: cards
+- name: MerchantInstallment
+  domain: cards
+- name: Webhook
+  domain: events
+  relationships:
+  - {type: has_many, target: Event, via: webhookId}
+- name: Event
+  domain: events
+  relationships:
+  - {type: has_many, target: EventAttempt, via: eventId}
+  note: >-
+    subject is one of the subscribed resources (deposit, invoice, transfer,
+    boleto, brcode-payment, boleto-payment, utility-payment, darf-payment,
+    payment-request, boleto-holmes)
+- name: EventAttempt
+  domain: events
+- name: DictKey
+  domain: pix
+  note: Pix key (DICT) lookup
+- name: Institution
+  domain: pix

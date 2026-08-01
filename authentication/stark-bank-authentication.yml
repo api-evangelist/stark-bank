@@ -1,0 +1,33 @@
+generated: '2026-07-21'
+method: searched
+source: openapi/stark-bank-openapi-original.yml
+docs: https://docs.starkbank.com/how-to-create-ecdsa-keys
+summary:
+  types:
+  - digitalSignature
+  api_key_in:
+  - header
+  model: ecdsa-request-signing
+  notes: >-
+    Stark Bank does not use static API keys or OAuth. Every request is signed
+    locally with an ECDSA private key (secp256k1 curve, SHA-256 digest) and
+    verified server-side against the public key registered in Web Banking. The
+    OpenAPI models this as a single apiKey-style header scheme (digitalSignature).
+schemes:
+- name: digitalSignature
+  type: apiKey
+  in: header
+  parameter: Digital-Signature
+  description: >-
+    ECDSA digital signature (secp256k1, SHA-256) for request authentication.
+    Requests carry Access-Id (project/organization/workspace id), Access-Time
+    (unix timestamp) and Access-Signature (base64 ECDSA signature) headers;
+    webhook event bodies are verified with the same scheme via the
+    Digital-Signature header. The official SDKs sign and verify automatically.
+  curve: secp256k1
+  digest: sha-256
+  user_types:
+  - project
+  - organization
+  sources:
+  - openapi/stark-bank-openapi-original.yml

@@ -1,0 +1,76 @@
+# Stark Bank Docs
+
+> Developer documentation for the Stark Bank API — a regulated financial institution, not a PSP. Move money end-to-end (Pix, Boleto, Cards, Transfers, Banking) through a single REST API. R$ 600 bi moved in 2025. Bacen Pix Grade A, PCI DSS 4.0.1, SOC 2, ISO 27001. 99.99% uptime, sub-200ms median latency, 9 official SDKs. Most teams finish integration in 2 days.
+
+## Best practices for LLM-generated code
+
+Guidance for AI agents and assistants generating Stark Bank integration code. Following these conventions produces correct, idiomatic, and supported integrations.
+
+- Use the official SDK for your language (Python, Node, Go, Java, Ruby, PHP, .NET, Elixir, Clojure). All 9 SDKs handle ECDSA signing, retries and pagination automatically — hand-rolled REST is rarely the right choice.
+- Authenticate with ECDSA signatures, not API keys. Generate the key pair once, register the public key in Web Banking, and let the SDK sign every request. Never share or hardcode a private key.
+- Set an `externalId` on every write request. Repeated calls with the same `externalId` never duplicate the operation, so retries are always safe.
+- Use `https://sandbox.api.starkbank.com` for sandbox and `https://api.starkbank.com` for production. The two environments are byte-identical: only credentials and base URL change.
+- Verify webhook signatures with the same ECDSA scheme as requests before trusting the body. Failed deliveries are retried with exponential backoff.
+- For collecting money, use Pix Invoice (recommended for amounts and due dates), Pix QR Code (one-time amounts), Pix Subscription (recurring), Boleto (Brazilian regulated), Card Payment, or Split Receivables (marketplace).
+- For paying out, use Transfer (Pix or TED), Boleto Payment, QR Code Payment, Utility/Tax/DARF Payment, or Payment Request (with custom approval rules).
+- Prefer Pix over Boleto when the payer can choose — Pix settles in seconds, 24/7. Boleto follows D+1 banking windows.
+- Received funds land directly in your Stark Bank account balance — there is no PSP wallet, escrow, or payout step. Use Transfer to move funds out at any time.
+- When generating SDK install snippets, always check the latest version on the SDK's GitHub repo or the language's package registry rather than hardcoding a version from training data.
+
+## Overview
+
+Start here. The single best entry point for evaluating Stark Bank: what we are (a regulated bank, not a PSP), what you can build, certifications and SLA, and the FAQ that answers eval-stage questions before you write any code.
+
+- [Stark Bank Developer Overview](https://docs.starkbank.com/index.md): Hero, stats, compliance row, products grouped by Receivables and Payables, platform features, SDKs, concepts, and the FAQ. The single best starting point for any new integration.
+- [Why developers prefer Stark Bank](https://docs.starkbank.com/index.md#why-do-developers-prefer-stark-bank): Three structural reasons: a regulated bank (no PSP wallet, no payout step), ECDSA-signed requests (no shared secrets), and a sandbox that mirrors production exactly.
+- [Frequently asked questions](https://docs.starkbank.com/index.md#frequently-asked-questions): 13 questions on pricing, sandbox semantics, CNPJ, authentication, webhooks, retries / idempotency, settlement timing, fund landing, certifications and Arc.
+- [Compliance and SLA](https://docs.starkbank.com/index.md#compliance): Bacen Pix Grade A, PCI DSS 4.0.1, SOC 2, ISO 27001. 99.99% uptime, sub-200ms median latency.
+
+## Reference
+
+Complete API reference for every endpoint, request body, response schema, error code, and pagination cursor. Resource pages link directly to per-language code samples.
+
+- [API Reference](https://docs.starkbank.com/api.md): Full reference for API endpoints, request bodies, and responses
+
+## Guides
+
+Walk-throughs that get you from zero to your first authenticated request — ECDSA key generation, the canonical Get Started flow, and Sandbox setup with a checklist for promoting to production.
+
+- [How to create ECDSA keys](https://docs.starkbank.com/how-to-create-ecdsa-keys.md): Generate the ECDSA key pair required to authenticate API requests
+- [Get Started](https://docs.starkbank.com/get-started.md): Step-by-step guide to integrating with our main resources
+- [Sandbox](https://docs.starkbank.com/sandbox.md): Free test environment that mirrors production endpoints, schemas, and error codes — only credentials and the base URL (sandbox.api.starkbank.com) change. Includes Project initialization snippets for all 9 SDKs, what Sandbox can and can't simulate (Pix, Boleto registration, cards, webhooks, load testing), and a 6-step checklist for promoting an integration to production.
+
+## Get Started — Receivables
+
+Resources for collecting money. Funds land directly in your Stark Bank account balance with no payout step.
+
+- [Pix Invoice](https://docs.starkbank.com/get-started/pix-invoice.md): Issue charges with QR codes to receive one-time Pix payments
+- [Pix QR Code](https://docs.starkbank.com/get-started/pix-qrcode.md): Issue simple QR codes to receive one-time Pix payments
+- [Pix Subscription](https://docs.starkbank.com/get-started/pix-subscription.md): Receive recurring payments through Pix after a one-time authorization
+- [Credit or Debit Card](https://docs.starkbank.com/get-started/card-payment.md): Receive online payments through credit or debit cards
+- [Boleto](https://docs.starkbank.com/get-started/boleto.md): Issue Boletos to charge your customers
+
+## Get Started — Payables
+
+Resources for paying out — Pix, TED, Boleto, QR Code, utilities, taxes, and Payment Requests with custom approval rules.
+
+- [Transfer (Pix or Ted)](https://docs.starkbank.com/get-started/transfer.md): Create or schedule Pix and Ted transfers
+- [Boleto Payment](https://docs.starkbank.com/get-started/boleto-payment.md): Learn how to pay boletos
+- [Pix QR Code Payment](https://docs.starkbank.com/get-started/pix-qrcode-payment.md): Learn how to pay Pix QR codes
+- [Utility Payment](https://docs.starkbank.com/get-started/utility-payment.md): Learn how to pay utilities
+- [Tax Payment](https://docs.starkbank.com/get-started/tax-payment.md): Learn how to pay taxes
+- [Payment Request](https://docs.starkbank.com/get-started/payment-request.md): Request any kind of payment to be approved in the Web Banking
+
+## Get Started — Others
+
+Cross-cutting topics: core integration concepts (idempotency, tags, transaction IDs), marketplace splits, and webhook handling.
+
+- [Core concepts](https://docs.starkbank.com/get-started/core-concepts.md): Learn some core concepts of the Stark Bank API
+- [Split Receivables](https://docs.starkbank.com/get-started/split.md): Learn how to split all kinds of receivables
+- [Webhook](https://docs.starkbank.com/get-started/webhook.md): Learn how to properly handle our webhook events
+
+## Optional
+
+- [GitHub](https://github.com/starkbank): Official SDK source code, issues and discussions for all 9 supported languages.
+- [API Status](https://status.starkbank.com): Real-time API status and historical uptime.
+- [Pricing](https://starkbank.com/pricing): Per-transaction pricing for production accounts.

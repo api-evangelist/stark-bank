@@ -1,0 +1,37 @@
+generated: '2026-07-21'
+method: searched
+source: live probes of /.well-known/ on Stark Bank hosts
+note: >-
+  No machine-readable /.well-known/ discovery documents were found. api.starkbank.com
+  returns HTTP 400 for /.well-known/* paths; www.starkbank.com returns its SPA shell
+  (HTTP 200 soft-404, not a real document) for security.txt and ai-plugin.json. No
+  openid-configuration, oauth-authorization-server, or api-catalog is published
+  (Stark Bank authenticates with ECDSA request signing, not OAuth/OIDC). Absence is
+  valid, expected data.
+host: https://api.starkbank.com
+documents:
+- path: /.well-known/security.txt
+  host: https://www.starkbank.com
+  status: 200
+  real: false
+  note: SPA soft-404 (2830-byte HTML shell), not an RFC 9116 document
+- path: /.well-known/security.txt
+  host: https://api.starkbank.com
+  status: 400
+- path: /.well-known/openid-configuration
+  host: https://api.starkbank.com
+  status: 400
+- path: /.well-known/oauth-authorization-server
+  host: https://api.starkbank.com
+  status: 400
+- path: /.well-known/api-catalog
+  host: https://api.starkbank.com
+  status: 400
+- path: /.well-known/ai-plugin.json
+  host: https://api.starkbank.com
+  status: 400
+- path: /.well-known/ai-plugin.json
+  host: https://www.starkbank.com
+  status: 200
+  real: false
+  note: SPA soft-404 (2830-byte HTML shell), not a plugin manifest

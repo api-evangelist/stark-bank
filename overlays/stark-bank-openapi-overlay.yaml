@@ -1,0 +1,24 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Stark Bank API
+  version: 1.0.0
+extends: openapi/stark-bank-openapi-original.yml
+actions:
+- target: $.info
+  update:
+    x-apievangelist-rating: 4
+    x-apievangelist-notes: >-
+      Regulated Brazilian bank (not a PSP) with an end-to-end money-movement REST
+      API: Pix, Boleto, Cards, Transfers, Split. ECDSA request signing; cursor
+      pagination; externalId idempotency on writes; webhook event surface;
+      9 official SDKs. OpenAPI 3.1, 143 operations.
+- target: $.info
+  update:
+    x-authentication: authentication/stark-bank-authentication.yml
+    x-conventions: conventions/stark-bank-conventions.yml
+    x-errors: errors/stark-bank-problem-types.yml
+    x-webhooks: asyncapi/stark-bank-events-webhooks.yml
+    x-idempotency:
+      supported: true
+      mechanism: externalId
+      scope: write-operations

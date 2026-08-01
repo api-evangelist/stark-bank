@@ -1,0 +1,39 @@
+generated: '2026-07-21'
+method: searched
+source: https://docs.starkbank.com/sandbox + https://docs.starkbank.com/llms.txt
+summary: >-
+  Free sandbox that mirrors production endpoints, schemas and error codes
+  byte-for-byte. Only the credentials and the base URL change. Sign up in
+  Sandbox Web Banking, create a Project, generate an ECDSA key pair and register
+  the public key — no real money moves.
+environments:
+- name: sandbox
+  base_url: https://sandbox.api.starkbank.com
+  web_banking: https://sandbox.web.starkbank.com
+  purpose: testing; credentials do NOT transfer to production
+- name: production
+  base_url: https://api.starkbank.com
+  web_banking: https://web.starkbank.com
+credentials:
+  model: ecdsa-key-pair
+  user_types:
+  - project
+  - organization
+  note: >-
+    Credentials are created per environment in Web Banking. A Sandbox Project
+    private key is set on the SDK via environment="sandbox".
+can_simulate:
+- Pix (invoices, QR codes, transfers) end to end
+- Boleto registration and payment
+- Card receiving (merchant sessions/purchases)
+- Webhook event delivery and signature verification
+cannot_simulate:
+- Real settlement / real money movement
+- Load / stress testing against production limits
+promote_to_production:
+  steps: 6
+  docs: https://docs.starkbank.com/sandbox
+note: >-
+  Stark Bank publishes no fixed "magic" test card numbers or test IBANs in the
+  crawled docs; test data is generated inside the Sandbox account. No values are
+  invented here.

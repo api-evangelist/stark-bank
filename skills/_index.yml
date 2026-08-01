@@ -1,0 +1,23 @@
+generated: '2026-07-21'
+method: generated
+source: openapi/stark-bank-openapi-original.yml + conventions/ + errors/
+note: >-
+  Packaged Agent Skills generated from real Stark Bank operationIds (grepped from
+  the OpenAPI). No provider-published skills/AGENTS.md were found.
+skills:
+- file: stark-bank-receive-pix-invoice.md
+  name: Receive a Pix payment with a Stark Bank Invoice
+  api: openapi/stark-bank-openapi-original.yml
+  operations: [create-invoice, get-invoice-byId, get-invoice-byId-qrcode, get-invoice-byId-payment, list-invoice-log]
+- file: stark-bank-send-transfer.md
+  name: Send money with a Stark Bank Transfer
+  api: openapi/stark-bank-openapi-original.yml
+  operations: [create-transfer, get-transfer-byId, get-transfer-byId-pdf, list-transfer-log, list-balance]
+- file: stark-bank-handle-webhooks.md
+  name: Subscribe to and process Stark Bank webhook events
+  api: openapi/stark-bank-openapi-original.yml
+  operations: [create-webhook, list-webhook, get-webhook-byId, delete-webhook-byId, list-event, get-event-byId, update-event-byId, list-event-attempt]
+- file: stark-bank-pay-brcode-boleto.md
+  name: Pay a Pix BR Code or Boleto with Stark Bank
+  api: openapi/stark-bank-openapi-original.yml
+  operations: [create-paymentPreview, create-brcodePayment, get-brcodePayment-byId, create-boletoPayment, get-boletoPayment-byId, list-boletoPayment-log]

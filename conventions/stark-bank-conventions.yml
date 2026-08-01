@@ -1,0 +1,43 @@
+generated: '2026-07-21'
+method: searched
+source: >-
+  https://docs.starkbank.com/get-started/core-concepts +
+  https://docs.starkbank.com/llms.txt + openapi/stark-bank-openapi-original.yml
+authentication:
+  style: ecdsa-request-signing
+  headers: [Access-Id, Access-Time, Access-Signature]
+  ref: authentication/stark-bank-authentication.yml
+idempotency:
+  supported: true
+  mechanism: externalId
+  scope: write operations (create/POST)
+  retention: permanent (per resource)
+  behavior: >-
+    Setting an externalId on a write request makes repeated calls with the same
+    externalId return the original resource instead of duplicating it, so retries
+    are always safe.
+  source: https://docs.starkbank.com/llms.txt
+pagination:
+  style: cursor
+  request_params: [cursor, limit]
+  response_fields: [cursor]
+  page_max: 100
+  source: https://docs.starkbank.com/api
+metadata:
+  mechanism: tags
+  note: most resources accept a free-form tags[] array for your own labelling
+versioning:
+  style: uri-path
+  current: v2
+  ref: lifecycle/stark-bank-lifecycle.yml
+error_envelope:
+  media_type: application/json
+  shape: '{ "errors": [ { "code": "string", "message": "string" } ] }'
+  ref: errors/stark-bank-problem-types.yml
+webhooks:
+  model: subscription
+  verification: ECDSA (Digital-Signature header), same scheme as requests
+  retries: exponential backoff on failed delivery
+  ref: asyncapi/stark-bank-events-webhooks.yml
+rate_limiting:
+  note: no public rate-limit signaling headers documented in the crawled docs

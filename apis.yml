@@ -1,9 +1,31 @@
 aid: stark-bank
 name: Stark Bank
-description: 'Stark Bank is a company surfaced as a portfolio company of ribbit-capital and added to the
-  API Evangelist network as a stub for enrichment. Sector: fintech. This profile is a lead awaiting the
-  enrichment pipeline.'
+description: >-
+  Stark Bank is a regulated Brazilian financial institution (authorized by the Banco
+  Central do Brasil, not a payment service provider) that exposes end-to-end money
+  movement through a single RESTful JSON API. Businesses collect money with Pix
+  Invoices, Pix QR codes, Pix subscriptions, Boletos, card payments and marketplace
+  split receivables, and pay out with Pix/TED Transfers, Boleto, BR Code, utility,
+  tax and DARF payments plus approval-gated Payment Requests. Received funds land
+  directly in the account balance with no wallet or payout step. The v2 OpenAPI 3.1
+  API (143 operations) authenticates with ECDSA request signing rather than API keys
+  or OAuth, offers a production-identical sandbox, cursor pagination, externalId
+  idempotency and signed webhook events, and ships nine official SDKs (Python, Node,
+  Go, Java, Ruby, PHP, .NET, Elixir, Clojure).
 url: https://raw.githubusercontent.com/api-evangelist/stark-bank/refs/heads/main/apis.yml
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://www.starkbank.com/static/icon.png
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
@@ -12,16 +34,839 @@ x-tier: stub
 x-tier-reason: portfolio-lead
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-21'
 tags:
 - Company
 - Fintech
-apis: []
+- Banking
+- Payments
+- Pix
+- Boleto
+- Banking as a Service
+- Brazil
+- Financial Services
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+apis:
+- aid: stark-bank:stark-bank-balance-api
+  name: Stark Bank Balance API
+  description: >-
+    The balance entity holds the total funds available in your workspace and can be calculated as the
+    sum of its transactions (cash-in + cash-out).
+
+    Therefore, you can also interpret Transactions as balance change logs.
+  humanURL: https://docs.starkbank.com/api
+  baseURL: https://api.starkbank.com
+  tags:
+  - Balance
+  properties:
+  - type: OpenAPI
+    url: openapi/stark-bank-balance-api-openapi.yml
+  - type: Postman
+    url: postman/stark-bank-postman.json
+  - type: Authentication
+    url: authentication/stark-bank-authentication.yml
+  - type: Webhooks
+    url: asyncapi/stark-bank-events-webhooks.yml
+  - type: ErrorCatalog
+    url: errors/stark-bank-problem-types.yml
+  - type: DataModel
+    url: data-model/stark-bank-data-model.yml
+- aid: stark-bank:stark-bank-boleto-api
+  name: Stark Bank Boleto API
+  description: >-
+    A boleto is a method you can use to charge your customers or load your Stark Bank account. Here we
+    will teach you how to create and manage boletos.
+
+    You can also split a Boleto between different receivers, you need to create a Split Receiver, and
+    add the receiver into the Splits array.
+  humanURL: https://docs.starkbank.com/api
+  baseURL: https://api.starkbank.com
+  tags:
+  - Boleto
+  properties:
+  - type: OpenAPI
+    url: openapi/stark-bank-boleto-api-openapi.yml
+  - type: Postman
+    url: postman/stark-bank-postman.json
+  - type: Authentication
+    url: authentication/stark-bank-authentication.yml
+  - type: Webhooks
+    url: asyncapi/stark-bank-events-webhooks.yml
+  - type: ErrorCatalog
+    url: errors/stark-bank-problem-types.yml
+  - type: DataModel
+    url: data-model/stark-bank-data-model.yml
+- aid: stark-bank:stark-bank-boleto-holmes-api
+  name: Stark Bank Boleto Holmes API
+  description: >-
+    Honoring the famous Sherlock Holmes, this feature allows your application to investigate updated boleto
+    status according to CIP in less than an hour.
+
+    Here we will teach you how to create and manage your Boleto Holmes. Ideally, since results are asynchronous,
+    you should register a Boleto Holmes webhook subscription in order to receive the investigation results
+    instead of polling.
+  humanURL: https://docs.starkbank.com/api
+  baseURL: https://api.starkbank.com
+  tags:
+  - Boleto Holmes
+  properties:
+  - type: OpenAPI
+    url: openapi/stark-bank-boleto-holmes-api-openapi.yml
+  - type: Postman
+    url: postman/stark-bank-postman.json
+  - type: Authentication
+    url: authentication/stark-bank-authentication.yml
+  - type: Webhooks
+    url: asyncapi/stark-bank-events-webhooks.yml
+  - type: ErrorCatalog
+    url: errors/stark-bank-problem-types.yml
+  - type: DataModel
+    url: data-model/stark-bank-data-model.yml
+- aid: stark-bank:stark-bank-boleto-payment-api
+  name: Stark Bank Boleto Payment API
+  description: Here we will teach you how to create and manage boleto payments.
+  humanURL: https://docs.starkbank.com/api
+  baseURL: https://api.starkbank.com
+  tags:
+  - Boleto Payment
+  properties:
+  - type: OpenAPI
+    url: openapi/stark-bank-boleto-payment-api-openapi.yml
+  - type: Postman
+    url: postman/stark-bank-postman.json
+  - type: Authentication
+    url: authentication/stark-bank-authentication.yml
+  - type: Webhooks
+    url: asyncapi/stark-bank-events-webhooks.yml
+  - type: ErrorCatalog
+    url: errors/stark-bank-problem-types.yml
+  - type: DataModel
+    url: data-model/stark-bank-data-model.yml
+- aid: stark-bank:stark-bank-brcode-payment-api
+  name: Stark Bank Brcode Payment API
+  description: Here we will teach you how to create and manage brcode payments.
+  humanURL: https://docs.starkbank.com/api
+  baseURL: https://api.starkbank.com
+  tags:
+  - Brcode Payment
+  properties:
+  - type: OpenAPI
+    url: openapi/stark-bank-brcode-payment-api-openapi.yml
+  - type: Postman
+    url: postman/stark-bank-postman.json
+  - type: Authentication
+    url: authentication/stark-bank-authentication.yml
+  - type: Webhooks
+    url: asyncapi/stark-bank-events-webhooks.yml
+  - type: ErrorCatalog
+    url: errors/stark-bank-problem-types.yml
+  - type: DataModel
+    url: data-model/stark-bank-data-model.yml
+- aid: stark-bank:stark-bank-darf-payment-api
+  name: Stark Bank Darf Payment API
+  description: Here we will explain how to manually pay DARFs without bar codes.
+  humanURL: https://docs.starkbank.com/api
+  baseURL: https://api.starkbank.com
+  tags:
+  - Darf Payment
+  properties:
+  - type: OpenAPI
+    url: openapi/stark-bank-darf-payment-api-openapi.yml
+  - type: Postman
+    url: postman/stark-bank-postman.json
+  - type: Authentication
+    url: authentication/stark-bank-authentication.yml
+  - type: Webhooks
+    url: asyncapi/stark-bank-events-webhooks.yml
+  - type: ErrorCatalog
+    url: errors/stark-bank-problem-types.yml
+  - type: DataModel
+    url: data-model/stark-bank-data-model.yml
+- aid: stark-bank:stark-bank-deposit-api
+  name: Stark Bank Deposit API
+  description: >-
+    Deposits represent passive cash-ins received by your account from external transfers or payments.
+    In this section, we will teach you how to manage your Deposits.
+  humanURL: https://docs.starkbank.com/api
+  baseURL: https://api.starkbank.com
+  tags:
+  - Deposit
+  properties:
+  - type: OpenAPI
+    url: openapi/stark-bank-deposit-api-openapi.yml
+  - type: Postman
+    url: postman/stark-bank-postman.json
+  - type: Authentication
+    url: authentication/stark-bank-authentication.yml
+  - type: Webhooks
+    url: asyncapi/stark-bank-events-webhooks.yml
+  - type: ErrorCatalog
+    url: errors/stark-bank-problem-types.yml
+  - type: DataModel
+    url: data-model/stark-bank-data-model.yml
+- aid: stark-bank:stark-bank-dynamic-brcode-api
+  name: Stark Bank Dynamic Brcode API
+  description: >-
+    Note:This is a basic Pix QR Code solution for one time payment. For a complete Pix QR Code receivable,
+    check the Invoice resource.
+
+    When a Dynamic Brcode is paid, a Deposit is created with the tags parameter containing the string
+    "dynamic-brcode/" followed by the Dynamic Brcode's uuid "dynamic-brcode/{uuid}" for conciliation.
+  humanURL: https://docs.starkbank.com/api
+  baseURL: https://api.starkbank.com
+  tags:
+  - Dynamic Brcode
+  properties:
+  - type: OpenAPI
+    url: openapi/stark-bank-dynamic-brcode-api-openapi.yml
+  - type: Postman
+    url: postman/stark-bank-postman.json
+  - type: Authentication
+    url: authentication/stark-bank-authentication.yml
+  - type: Webhooks
+    url: asyncapi/stark-bank-events-webhooks.yml
+  - type: ErrorCatalog
+    url: errors/stark-bank-problem-types.yml
+  - type: DataModel
+    url: data-model/stark-bank-data-model.yml
+- aid: stark-bank:stark-bank-event-api
+  name: Stark Bank Event API
+  description: >-
+    Every time a log is created, a corresponding event will be generated and sent to you by webhook, if
+    the appropriate subscription was set. Therefore, the event represents an occurrence in your workspace.
+
+    NOTE: All the events have a log property containing an entity log. The nature of the log, however,
+    may change according to the subscription that triggered the event. For example, if the subscription
+    is transfer, the log in the event will be a TransferLog. If the subscription is boleto, the log in
+    the event will be a BoletoLog, and so on.
+  humanURL: https://docs.starkbank.com/api
+  baseURL: https://api.starkbank.com
+  tags:
+  - Event
+  properties:
+  - type: OpenAPI
+    url: openapi/stark-bank-event-api-openapi.yml
+  - type: Postman
+    url: postman/stark-bank-postman.json
+  - type: Authentication
+    url: authentication/stark-bank-authentication.yml
+  - type: Webhooks
+    url: asyncapi/stark-bank-events-webhooks.yml
+  - type: ErrorCatalog
+    url: errors/stark-bank-problem-types.yml
+  - type: DataModel
+    url: data-model/stark-bank-data-model.yml
+- aid: stark-bank:stark-bank-event-attempt-api
+  name: Stark Bank Event Attempt API
+  description: >-
+    When an Event delivery fails, an event attempt will be registered. It carries information meant to
+    help you debug event reception issues.
+  humanURL: https://docs.starkbank.com/api
+  baseURL: https://api.starkbank.com
+  tags:
+  - Event Attempt
+  properties:
+  - type: OpenAPI
+    url: openapi/stark-bank-event-attempt-api-openapi.yml
+  - type: Postman
+    url: postman/stark-bank-postman.json
+  - type: Authentication
+    url: authentication/stark-bank-authentication.yml
+  - type: Webhooks
+    url: asyncapi/stark-bank-events-webhooks.yml
+  - type: ErrorCatalog
+    url: errors/stark-bank-problem-types.yml
+  - type: DataModel
+    url: data-model/stark-bank-data-model.yml
+- aid: stark-bank:stark-bank-institutions-api
+  name: Stark Bank Institutions API
+  description: >-
+    An Institution is used to query institutions registered by the Brazilian Central Bank for Pix and
+    Ted transactions.
+  humanURL: https://docs.starkbank.com/api
+  baseURL: https://api.starkbank.com
+  tags:
+  - Institutions
+  properties:
+  - type: OpenAPI
+    url: openapi/stark-bank-institutions-api-openapi.yml
+  - type: Postman
+    url: postman/stark-bank-postman.json
+  - type: Authentication
+    url: authentication/stark-bank-authentication.yml
+  - type: Webhooks
+    url: asyncapi/stark-bank-events-webhooks.yml
+  - type: ErrorCatalog
+    url: errors/stark-bank-problem-types.yml
+  - type: DataModel
+    url: data-model/stark-bank-data-model.yml
+- aid: stark-bank:stark-bank-invoice-api
+  name: Stark Bank Invoice API
+  description: >-
+    The Invoice resource is used to request payments from customers.
+
+    Your customer can pay it by scanning the Pix QR Code or making a deposit to the indicated account
+    number.
+
+    You can set custom fields as fine, interest, overdue date and expiration date, for a complete charge
+    method, much better than boleto.
+
+    If you're used to our Boleto resource, you will feel pretty familiar with the Invoice flow. In this
+    section, we will teach you how to create and manage your Pix invoices.
+
+    You can also split the Invoice between different receivers, you need to create a Split Receiver, and
+    add the receiver into the Splits array.
+  humanURL: https://docs.starkbank.com/api
+  baseURL: https://api.starkbank.com
+  tags:
+  - Invoice
+  properties:
+  - type: OpenAPI
+    url: openapi/stark-bank-invoice-api-openapi.yml
+  - type: Postman
+    url: postman/stark-bank-postman.json
+  - type: Authentication
+    url: authentication/stark-bank-authentication.yml
+  - type: Webhooks
+    url: asyncapi/stark-bank-events-webhooks.yml
+  - type: ErrorCatalog
+    url: errors/stark-bank-problem-types.yml
+  - type: DataModel
+    url: data-model/stark-bank-data-model.yml
+- aid: stark-bank:stark-bank-invoice-pull-request-api
+  name: Stark Bank Invoice Pull Request API
+  description: >-
+    An Invoice Pull Request is a command sent to the payer's bank to trigger the automatic debit of a
+    previously issued invoice linked to an active Invoice Pull Subscription. It confirms the receiver's
+    intent to collect the agreed amount within the current billing cycle and initiates the settlement
+    process through the Pix infrastructure.
+
+    You can use asynchronous webhooks to monitor status changes.
+  humanURL: https://docs.starkbank.com/api
+  baseURL: https://api.starkbank.com
+  tags:
+  - Invoice Pull Request
+  properties:
+  - type: OpenAPI
+    url: openapi/stark-bank-invoice-pull-request-api-openapi.yml
+  - type: Postman
+    url: postman/stark-bank-postman.json
+  - type: Authentication
+    url: authentication/stark-bank-authentication.yml
+  - type: Webhooks
+    url: asyncapi/stark-bank-events-webhooks.yml
+  - type: ErrorCatalog
+    url: errors/stark-bank-problem-types.yml
+  - type: DataModel
+    url: data-model/stark-bank-data-model.yml
+- aid: stark-bank:stark-bank-invoice-pull-subscription-api
+  name: Stark Bank Invoice Pull Subscription API
+  description: >-
+    An Invoice Pull Subscription is a recurring payment agreement between a payer and a receiver, authorized
+    through the Pix Automatic infrastructure. Once active, it allows the receiver to periodically trigger
+    automatic debits by issuing invoices that match the agreed conditions such as amount, frequency, and
+    billing cycle without requiring new consent for each transaction.
+
+    You can use asynchronous webhooks to monitor status changes.
+  humanURL: https://docs.starkbank.com/api
+  baseURL: https://api.starkbank.com
+  tags:
+  - Invoice Pull Subscription
+  properties:
+  - type: OpenAPI
+    url: openapi/stark-bank-invoice-pull-subscription-api-openapi.yml
+  - type: Postman
+    url: postman/stark-bank-postman.json
+  - type: Authentication
+    url: authentication/stark-bank-authentication.yml
+  - type: Webhooks
+    url: asyncapi/stark-bank-events-webhooks.yml
+  - type: ErrorCatalog
+    url: errors/stark-bank-problem-types.yml
+  - type: DataModel
+    url: data-model/stark-bank-data-model.yml
+- aid: stark-bank:stark-bank-merchant-card-api
+  name: Stark Bank Merchant Card API
+  description: >-
+    The Merchant Card resource stores information about cards used in approved purchases.
+
+    These cards can be used in new purchases without the need to create a new session.
+  humanURL: https://docs.starkbank.com/api
+  baseURL: https://api.starkbank.com
+  tags:
+  - Merchant Card
+  properties:
+  - type: OpenAPI
+    url: openapi/stark-bank-merchant-card-api-openapi.yml
+  - type: Postman
+    url: postman/stark-bank-postman.json
+  - type: Authentication
+    url: authentication/stark-bank-authentication.yml
+  - type: Webhooks
+    url: asyncapi/stark-bank-events-webhooks.yml
+  - type: ErrorCatalog
+    url: errors/stark-bank-problem-types.yml
+  - type: DataModel
+    url: data-model/stark-bank-data-model.yml
+- aid: stark-bank:stark-bank-merchant-installment-api
+  name: Stark Bank Merchant Installment API
+  description: >-
+    Merchant Installments are created for every installment in a purchase.
+
+    These resources will track its own due payment date and settlement lifecycle.
+  humanURL: https://docs.starkbank.com/api
+  baseURL: https://api.starkbank.com
+  tags:
+  - Merchant Installment
+  properties:
+  - type: OpenAPI
+    url: openapi/stark-bank-merchant-installment-api-openapi.yml
+  - type: Postman
+    url: postman/stark-bank-postman.json
+  - type: Authentication
+    url: authentication/stark-bank-authentication.yml
+  - type: Webhooks
+    url: asyncapi/stark-bank-events-webhooks.yml
+  - type: ErrorCatalog
+    url: errors/stark-bank-problem-types.yml
+  - type: DataModel
+    url: data-model/stark-bank-data-model.yml
+- aid: stark-bank:stark-bank-merchant-purchase-api
+  name: Stark Bank Merchant Purchase API
+  description: >-
+    The Merchant Purchase resource can be used to charge customers with credit or debit cards.
+
+    If a card hasn't been used before, a Merchant Session Purchase must be created and approved with that
+    specific card before it can be used directly in a Merchant Purchase.
+  humanURL: https://docs.starkbank.com/api
+  baseURL: https://api.starkbank.com
+  tags:
+  - Merchant Purchase
+  properties:
+  - type: OpenAPI
+    url: openapi/stark-bank-merchant-purchase-api-openapi.yml
+  - type: Postman
+    url: postman/stark-bank-postman.json
+  - type: Authentication
+    url: authentication/stark-bank-authentication.yml
+  - type: Webhooks
+    url: asyncapi/stark-bank-events-webhooks.yml
+  - type: ErrorCatalog
+    url: errors/stark-bank-problem-types.yml
+  - type: DataModel
+    url: data-model/stark-bank-data-model.yml
+- aid: stark-bank:stark-bank-merchant-session-api
+  name: Stark Bank Merchant Session API
+  description: >-
+    The Merchant Session resource can be created by a merchant and used by the card holder in order to
+    collect their card data without having to handle it on the merchant's side.
+
+    The card data can be sent directly from a browser or app to Stark Bank's API using the Merchant Session
+    Purchase route.
+  humanURL: https://docs.starkbank.com/api
+  baseURL: https://api.starkbank.com
+  tags:
+  - Merchant Session
+  properties:
+  - type: OpenAPI
+    url: openapi/stark-bank-merchant-session-api-openapi.yml
+  - type: Postman
+    url: postman/stark-bank-postman.json
+  - type: Authentication
+    url: authentication/stark-bank-authentication.yml
+  - type: Webhooks
+    url: asyncapi/stark-bank-events-webhooks.yml
+  - type: ErrorCatalog
+    url: errors/stark-bank-problem-types.yml
+  - type: DataModel
+    url: data-model/stark-bank-data-model.yml
+- aid: stark-bank:stark-bank-payment-preview-api
+  name: Stark Bank Payment Preview API
+  description: >-
+    A Payment Preview is used to get information from multiple types of payment to confirm any information
+    before actually paying. If the 'scheduled' parameter is not informed, today will be assumed as the
+    intended payment date. Right now, the 'scheduled' parameter only has effect on BrcodePreviews.
+
+    This resource is able to preview the following types of payment: "brcode-payment", "boleto-payment",
+    "utility-payment" and "tax-payment"
+  humanURL: https://docs.starkbank.com/api
+  baseURL: https://api.starkbank.com
+  tags:
+  - Payment Preview
+  properties:
+  - type: OpenAPI
+    url: openapi/stark-bank-payment-preview-api-openapi.yml
+  - type: Postman
+    url: postman/stark-bank-postman.json
+  - type: Authentication
+    url: authentication/stark-bank-authentication.yml
+  - type: Webhooks
+    url: asyncapi/stark-bank-events-webhooks.yml
+  - type: ErrorCatalog
+    url: errors/stark-bank-problem-types.yml
+  - type: DataModel
+    url: data-model/stark-bank-data-model.yml
+- aid: stark-bank:stark-bank-payment-request-api
+  name: Stark Bank Payment Request API
+  description: >-
+    Here we will teach you how to create and manage your payment requests. The payment request is the
+    main element of our approval flow, which can be checked out by logging into our Web Banking.
+
+    The requests are bound to their respective cost centers and represent requests to execute specific
+    payments, which can be transfers, boleto payments, etc. Expect more payment options to be introduced!
+  humanURL: https://docs.starkbank.com/api
+  baseURL: https://api.starkbank.com
+  tags:
+  - Payment Request
+  properties:
+  - type: OpenAPI
+    url: openapi/stark-bank-payment-request-api-openapi.yml
+  - type: Postman
+    url: postman/stark-bank-postman.json
+  - type: Authentication
+    url: authentication/stark-bank-authentication.yml
+  - type: Webhooks
+    url: asyncapi/stark-bank-events-webhooks.yml
+  - type: ErrorCatalog
+    url: errors/stark-bank-problem-types.yml
+  - type: DataModel
+    url: data-model/stark-bank-data-model.yml
+- aid: stark-bank:stark-bank-pix-key-api
+  name: Stark Bank Pix Key API
+  description: >-
+    The Pix keys are saved in the DICT (Diretório de Identificadores de Contas Transacionais), the centralized
+    Pix service managed by Bacen (Brazilian Central Bank) that allows you to search for transactional
+    accounts with convenient addressing keys.
+
+    The types of keys currently available are CPF, CNPJ, phone number, e-mail and EVP (random UUID). In
+    this section, we will teach you how to manage DICT keys.
+
+    Note: Whenever a Workspace is created, an EVP (random) DICT key is created and associated with it.
+    This is done in order to ensure the safety of the Invoice service, since it requires an active DICT
+    Key to work.
+  humanURL: https://docs.starkbank.com/api
+  baseURL: https://api.starkbank.com
+  tags:
+  - Pix Key
+  properties:
+  - type: OpenAPI
+    url: openapi/stark-bank-pix-key-api-openapi.yml
+  - type: Postman
+    url: postman/stark-bank-postman.json
+  - type: Authentication
+    url: authentication/stark-bank-authentication.yml
+  - type: Webhooks
+    url: asyncapi/stark-bank-events-webhooks.yml
+  - type: ErrorCatalog
+    url: errors/stark-bank-problem-types.yml
+  - type: DataModel
+    url: data-model/stark-bank-data-model.yml
+- aid: stark-bank:stark-bank-public-key-api
+  name: Stark Bank Public Key API
+  description: >-
+    Some of our responses will be signed using our own private key, such as the messages we send by webhook.
+    In order to verify that it was really us that generated the message, you can get our public key and
+    verify the provided signature and content.
+  humanURL: https://docs.starkbank.com/api
+  baseURL: https://api.starkbank.com
+  tags:
+  - Public Key
+  properties:
+  - type: OpenAPI
+    url: openapi/stark-bank-public-key-api-openapi.yml
+  - type: Postman
+    url: postman/stark-bank-postman.json
+  - type: Authentication
+    url: authentication/stark-bank-authentication.yml
+  - type: Webhooks
+    url: asyncapi/stark-bank-events-webhooks.yml
+  - type: ErrorCatalog
+    url: errors/stark-bank-problem-types.yml
+  - type: DataModel
+    url: data-model/stark-bank-data-model.yml
+- aid: stark-bank:stark-bank-split-api
+  name: Stark Bank Split API
+  description: The Split resource is used to split an Invoice or Boleto between different receivers.
+  humanURL: https://docs.starkbank.com/api
+  baseURL: https://api.starkbank.com
+  tags:
+  - Split
+  properties:
+  - type: OpenAPI
+    url: openapi/stark-bank-split-api-openapi.yml
+  - type: Postman
+    url: postman/stark-bank-postman.json
+  - type: Authentication
+    url: authentication/stark-bank-authentication.yml
+  - type: Webhooks
+    url: asyncapi/stark-bank-events-webhooks.yml
+  - type: ErrorCatalog
+    url: errors/stark-bank-problem-types.yml
+  - type: DataModel
+    url: data-model/stark-bank-data-model.yml
+- aid: stark-bank:stark-bank-split-profile-api
+  name: Stark Bank Split Profile API
+  description: The Split Profile resource is used to configure the behavior of split operations.
+  humanURL: https://docs.starkbank.com/api
+  baseURL: https://api.starkbank.com
+  tags:
+  - Split Profile
+  properties:
+  - type: OpenAPI
+    url: openapi/stark-bank-split-profile-api-openapi.yml
+  - type: Postman
+    url: postman/stark-bank-postman.json
+  - type: Authentication
+    url: authentication/stark-bank-authentication.yml
+  - type: Webhooks
+    url: asyncapi/stark-bank-events-webhooks.yml
+  - type: ErrorCatalog
+    url: errors/stark-bank-problem-types.yml
+  - type: DataModel
+    url: data-model/stark-bank-data-model.yml
+- aid: stark-bank:stark-bank-split-receiver-api
+  name: Stark Bank Split Receiver API
+  description: >-
+    You can create a Receiver to an Invoice or Boleto split by using the Split Receiver resource.
+  humanURL: https://docs.starkbank.com/api
+  baseURL: https://api.starkbank.com
+  tags:
+  - Split Receiver
+  properties:
+  - type: OpenAPI
+    url: openapi/stark-bank-split-receiver-api-openapi.yml
+  - type: Postman
+    url: postman/stark-bank-postman.json
+  - type: Authentication
+    url: authentication/stark-bank-authentication.yml
+  - type: Webhooks
+    url: asyncapi/stark-bank-events-webhooks.yml
+  - type: ErrorCatalog
+    url: errors/stark-bank-problem-types.yml
+  - type: DataModel
+    url: data-model/stark-bank-data-model.yml
+- aid: stark-bank:stark-bank-tax-payment-api
+  name: Stark Bank Tax Payment API
+  description: Here we will explain how to create and manage tax payments, such as ISS and DAS.
+  humanURL: https://docs.starkbank.com/api
+  baseURL: https://api.starkbank.com
+  tags:
+  - Tax Payment
+  properties:
+  - type: OpenAPI
+    url: openapi/stark-bank-tax-payment-api-openapi.yml
+  - type: Postman
+    url: postman/stark-bank-postman.json
+  - type: Authentication
+    url: authentication/stark-bank-authentication.yml
+  - type: Webhooks
+    url: asyncapi/stark-bank-events-webhooks.yml
+  - type: ErrorCatalog
+    url: errors/stark-bank-problem-types.yml
+  - type: DataModel
+    url: data-model/stark-bank-data-model.yml
+- aid: stark-bank:stark-bank-transaction-api
+  name: Stark Bank Transaction API
+  description: >-
+    Since Stark Bank is centralized, we have a private ledger to keep track of all transactions. It's
+    important to understand that every financial operation in Stark Bank generates a transaction that
+    is registered in our ledger.
+
+    You may directly generate a Transaction when you transfer money between workspaces in Stark Bank.
+    Other times, we generate the Transaction for you, when you make a Transfer, pay a Boleto or receive
+    money from a paid Boleto, for example.
+  humanURL: https://docs.starkbank.com/api
+  baseURL: https://api.starkbank.com
+  tags:
+  - Transaction
+  properties:
+  - type: OpenAPI
+    url: openapi/stark-bank-transaction-api-openapi.yml
+  - type: Postman
+    url: postman/stark-bank-postman.json
+  - type: Authentication
+    url: authentication/stark-bank-authentication.yml
+  - type: Webhooks
+    url: asyncapi/stark-bank-events-webhooks.yml
+  - type: ErrorCatalog
+    url: errors/stark-bank-problem-types.yml
+  - type: DataModel
+    url: data-model/stark-bank-data-model.yml
+- aid: stark-bank:stark-bank-transfer-api
+  name: Stark Bank Transfer API
+  description: >-
+    Transfers are used to send money to any bank account in Brazil using the Ted or Pix systems.
+
+    Here we will show you how to create and manage them.
+  humanURL: https://docs.starkbank.com/api
+  baseURL: https://api.starkbank.com
+  tags:
+  - Transfer
+  properties:
+  - type: OpenAPI
+    url: openapi/stark-bank-transfer-api-openapi.yml
+  - type: Postman
+    url: postman/stark-bank-postman.json
+  - type: Authentication
+    url: authentication/stark-bank-authentication.yml
+  - type: Webhooks
+    url: asyncapi/stark-bank-events-webhooks.yml
+  - type: ErrorCatalog
+    url: errors/stark-bank-problem-types.yml
+  - type: DataModel
+    url: data-model/stark-bank-data-model.yml
+- aid: stark-bank:stark-bank-utility-payment-api
+  name: Stark Bank Utility Payment API
+  description: >-
+    Here we will teach you how to create and manage utility payments, such as electricity and water bills.
+  humanURL: https://docs.starkbank.com/api
+  baseURL: https://api.starkbank.com
+  tags:
+  - Utility Payment
+  properties:
+  - type: OpenAPI
+    url: openapi/stark-bank-utility-payment-api-openapi.yml
+  - type: Postman
+    url: postman/stark-bank-postman.json
+  - type: Authentication
+    url: authentication/stark-bank-authentication.yml
+  - type: Webhooks
+    url: asyncapi/stark-bank-events-webhooks.yml
+  - type: ErrorCatalog
+    url: errors/stark-bank-problem-types.yml
+  - type: DataModel
+    url: data-model/stark-bank-data-model.yml
+- aid: stark-bank:stark-bank-webhook-api
+  name: Stark Bank Webhook API
+  description: >-
+    You can create webhook subscriptions to receive events whenever a new log is created. We send the
+    event by making a POST request to your endpoint URL. The event will be delivered with a digital signature
+    (headers["Digital-Signature"]), which can be verified using the Stark Bank public key. This key is
+    recoverable by a GET request to /v2/public-key.
+
+    If your endpoint URL does not return a 200 status, the webhook service will try again at most three
+    times. The interval between each attempt is 5 min, 30 min and finally 120 min. In case the event cannot
+    be delivered after those three attempts, we will stop trying to deliver the message.
+
+    The event sent to the endpoint URL has the structure shown to the right, where the content of the
+    log sent will depend on the event subscription.
+
+    NOTE 1: Registered webhooks will only work for services used in that same version. For example, if
+    you create a transfer in v2, its logs will only trigger v2 webhooks and v1 webhooks would ignore its
+    events.
+
+    NOTE 2: Even if you use Webhook, we strongly recommend that you create a daily task to get all undelivered
+    events and set them as delivered. It's important to add redundancy and resilience to your system,
+    preventing you from having outdated information just in case your system is temporarily unable to
+    receive our Webhook events.
+  humanURL: https://docs.starkbank.com/api
+  baseURL: https://api.starkbank.com
+  tags:
+  - Webhook
+  properties:
+  - type: OpenAPI
+    url: openapi/stark-bank-webhook-api-openapi.yml
+  - type: Postman
+    url: postman/stark-bank-postman.json
+  - type: Authentication
+    url: authentication/stark-bank-authentication.yml
+  - type: Webhooks
+    url: asyncapi/stark-bank-events-webhooks.yml
+  - type: ErrorCatalog
+    url: errors/stark-bank-problem-types.yml
+  - type: DataModel
+    url: data-model/stark-bank-data-model.yml
+- aid: stark-bank:stark-bank-workspace-api
+  name: Stark Bank Workspace API
+  description: >-
+    Workspaces are bank accounts. They have independent balances, statements, operations and permissions.
+    The only property that is shared between your workspaces is the link they have to your organization,
+    which carries your basic information, such as tax ID, name, etc...
+
+    The main reason for automating the creation of multiple Workspaces is to use our infrastructure to
+    divide your own customers into different buckets, setting them up with isolated balances and statements.
+  humanURL: https://docs.starkbank.com/api
+  baseURL: https://api.starkbank.com
+  tags:
+  - Workspace
+  properties:
+  - type: OpenAPI
+    url: openapi/stark-bank-workspace-api-openapi.yml
+  - type: Postman
+    url: postman/stark-bank-postman.json
+  - type: Authentication
+    url: authentication/stark-bank-authentication.yml
+  - type: Webhooks
+    url: asyncapi/stark-bank-events-webhooks.yml
+  - type: ErrorCatalog
+    url: errors/stark-bank-problem-types.yml
+  - type: DataModel
+    url: data-model/stark-bank-data-model.yml
 common:
 - type: Website
   url: https://www.starkbank.com
+- type: DeveloperPortal
+  url: https://docs.starkbank.com
+- type: Documentation
+  url: https://docs.starkbank.com/api
+- type: APIReference
+  url: https://docs.starkbank.com/api
+- type: GettingStarted
+  url: https://docs.starkbank.com/get-started
+- type: Blog
+  url: https://blog.starkbank.com
+- type: GitHubOrganization
+  url: https://github.com/starkbank
+- type: StatusPage
+  url: https://status.starkbank.com
+- type: Pricing
+  url: https://starkbank.com/pricing
+- type: SignUp
+  url: https://web.starkbank.com
+- type: Support
+  url: mailto:help@starkbank.com
+- type: Postman
+  url: postman/stark-bank-postman.json
+- type: LLMsTxt
+  url: llms/stark-bank-llms.txt
+- type: Packages
+  url: packages/stark-bank-packages.yml
+- type: SDKs
+  url: packages/stark-bank-packages.yml
+- type: MCPServer
+  url: mcp/stark-bank-mcp.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: Authentication
+  url: authentication/stark-bank-authentication.yml
+- type: Conventions
+  url: conventions/stark-bank-conventions.yml
+- type: Idempotency
+  url: conventions/stark-bank-conventions.yml
+- type: Sandbox
+  url: sandbox/stark-bank-sandbox.yml
+- type: Lifecycle
+  url: lifecycle/stark-bank-lifecycle.yml
+- type: ErrorCatalog
+  url: errors/stark-bank-problem-types.yml
+- type: DataModel
+  url: data-model/stark-bank-data-model.yml
+- type: Webhooks
+  url: asyncapi/stark-bank-events-webhooks.yml
+- type: Conformance
+  url: conformance/stark-bank-conformance.yml
+- type: Compliance
+  url: conformance/stark-bank-conformance.yml
+- type: TrustCenter
+  url: security/stark-bank-trust-center.yml
+- type: DomainSecurity
+  url: security/stark-bank-domain-security.yml
+x-enrichment:
+  date: '2026-07-21'
+  status: enriched
+  artifacts_added: 22
+  pass: local-v1

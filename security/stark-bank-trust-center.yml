@@ -1,0 +1,24 @@
+generated: '2026-07-21'
+method: searched
+probe: false
+source: >-
+  https://docs.starkbank.com/index.md#compliance +
+  https://docs.starkbank.com/llms.txt
+note: >-
+  No dedicated trust.starkbank.com portal was found (the automated probe returned
+  none because starkbank.com is a client-rendered SPA). The certifications below
+  are published verbatim in Stark Bank's developer docs compliance row, so they are
+  captured here as a searched result.
+url: https://docs.starkbank.com/index.md#compliance
+certifications:
+- PCI DSS 4.0.1
+- SOC 2
+- ISO 27001
+- Bacen Pix Grade A
+regulatory_status: >-
+  Regulated financial institution authorized by the Banco Central do Brasil
+  (not a payment service provider / PSP).
+sla_uptime_target: '99.99%'
+evidence:
+- source: https://docs.starkbank.com/llms.txt
+  keywords: [pci dss 4.0.1, soc 2, iso 27001, bacen pix grade a]

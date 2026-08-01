@@ -1,0 +1,20 @@
+generated: '2026-07-21'
+method: searched
+source: >-
+  https://docs.starkbank.com/api (versioning) +
+  https://docs.starkbank.com/llms.txt (SLA) + https://status.starkbank.com
+versioning:
+  scheme: uri-path
+  current: v2
+  docs: https://docs.starkbank.com/api
+  stability_policy: >-
+    Backward-compatible by design. New resources, optional parameters and
+    response fields are added without a version bump; clients must tolerate
+    unknown fields and event types. No dated deprecation/sunset policy or
+    RFC 8594 Sunset/Deprecation header support was found.
+sla:
+  uptime_target: '99.99%'
+  latency: sub-200ms median
+  source: https://docs.starkbank.com/index.md#compliance
+status_page: https://status.starkbank.com
+deprecated_operations: []

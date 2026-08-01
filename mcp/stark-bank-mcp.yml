@@ -1,0 +1,55 @@
+generated: '2026-07-21'
+method: derived
+status: candidate
+source: openapi/stark-bank-openapi-original.yml
+note: >-
+  No official hosted/remote Stark Bank MCP server was found (checked docs,
+  npm @modelcontextprotocol, and MCP registries). This is a DERIVED candidate
+  tool surface mapped from the OpenAPI operations, one tool per marquee
+  operationId. Not published by Stark Bank.
+server:
+  name: stark-bank
+  transport: http
+tools:
+- name: create_invoice
+  description: Issue a Pix Invoice (QR code) to receive a one-time payment
+  source_operation: openapi/stark-bank-openapi-original.yml#create-invoice
+- name: list_invoice
+  description: List invoices
+  source_operation: openapi/stark-bank-openapi-original.yml#list-invoice
+- name: get_invoice
+  description: Get an invoice by id
+  source_operation: openapi/stark-bank-openapi-original.yml#get-invoice-byId
+- name: create_boleto
+  description: Issue Boletos to charge customers
+  source_operation: openapi/stark-bank-openapi-original.yml#create-boleto
+- name: create_transfer
+  description: Create or schedule a Pix or TED transfer
+  source_operation: openapi/stark-bank-openapi-original.yml#create-transfer
+- name: create_brcode_payment
+  description: Pay a Pix QR code (BR Code)
+  source_operation: openapi/stark-bank-openapi-original.yml#create-brcodePayment
+- name: create_boleto_payment
+  description: Pay a boleto
+  source_operation: openapi/stark-bank-openapi-original.yml#create-boletoPayment
+- name: list_balance
+  description: Get the current account balance
+  source_operation: openapi/stark-bank-openapi-original.yml#list-balance
+- name: list_transaction
+  description: List account transactions
+  source_operation: openapi/stark-bank-openapi-original.yml#list-transaction
+- name: create_webhook
+  description: Subscribe a URL to receive webhook events
+  source_operation: openapi/stark-bank-openapi-original.yml#create-webhook
+- name: list_event
+  description: List webhook events
+  source_operation: openapi/stark-bank-openapi-original.yml#list-event
+- name: create_dynamic_brcode
+  description: Create a dynamic Pix BR Code
+  source_operation: openapi/stark-bank-openapi-original.yml#create-dynamicBrcode
+- name: create_payment_request
+  description: Request a payment to be approved in Web Banking
+  source_operation: openapi/stark-bank-openapi-original.yml#create-paymentRequest
+- name: create_split_receiver
+  description: Create a split receiver for marketplace receivables
+  source_operation: openapi/stark-bank-openapi-original.yml#create-splitReceiver

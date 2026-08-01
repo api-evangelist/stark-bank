@@ -1,0 +1,30 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/stark-bank-openapi-original.yml
+format: custom
+note: >-
+  Stark Bank does NOT use RFC 9457 problem+json. Errors return a custom JSON
+  envelope with an array of {code, message} objects. Client errors are HTTP 400
+  (with a machine-readable string code such as invalidAccessId or
+  invalidSignature), server errors are HTTP 500. The specific string codes are
+  documented per-resource in the API reference; the envelope shape is derived
+  from the OpenAPI Error/Errors schemas.
+envelope:
+  media_type: application/json
+  shape: '{ "errors": [ { "code": "string", "message": "string" } ] }'
+  schema_refs:
+  - '#/components/schemas/Errors'
+  - '#/components/schemas/Error'
+http_statuses:
+- status: 400
+  title: Client error
+  description: >-
+    Request rejected — validation, authentication or business-rule failure. The
+    errors[].code string identifies the exact cause (e.g. invalidAccessId,
+    invalidSignature, invalidJson, invalidAmount, insufficientFunds).
+  category: client
+- status: 500
+  title: Internal server error
+  description: Unexpected server-side failure; safe to retry with the same externalId.
+  category: server
+docs: https://docs.starkbank.com/api
