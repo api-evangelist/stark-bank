@@ -807,6 +807,8 @@ apis:
   - type: DataModel
     url: data-model/stark-bank-data-model.yml
 common:
+- type: Overlay
+  url: overlays/stark-bank-openapi-overlay.yaml
 - type: Website
   url: https://www.starkbank.com
 - type: DeveloperPortal
