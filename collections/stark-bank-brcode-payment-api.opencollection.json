@@ -1,0 +1,249 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Stark Bank Balance Brcode Payment API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Digital-Signature",
+      "value": "{{Digital-Signature}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Brcode Payment",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Brcode Payments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.starkbank.com/v2/brcode-payment",
+            "params": [
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Filter entities created after this date."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Filter entities created before this date."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "String used to get the next batch of results. Our SDKs handle this for you."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "List of strings to filter response JSON keys. Not available in the SDKs."
+              },
+              {
+                "name": "ids",
+                "value": "",
+                "type": "query",
+                "description": "List of strings to get specific entities by ids."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results per cursor. Max = 100."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter brcode payments by the specified status."
+              },
+              {
+                "name": "tags",
+                "value": "",
+                "type": "query",
+                "description": "Filter entities that contain the specified tags."
+              }
+            ]
+          },
+          "docs": "Get a list of non-deleted brcodes in chunks of at most 100. If you need smaller chunks, use the limit parameter."
+        },
+        {
+          "info": {
+            "name": "Create Brcode Payments",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.starkbank.com/v2/brcode-payment",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use this route to pay registered brcodes generated at Stark Bank or at other financial institutions using the available balance in your Stark Bank account.\nNOTE:Initially, the brcode entity amount will be zero because the brcode is processed asynchronously.\n"
+        },
+        {
+          "info": {
+            "name": "Get a Brcode Payment",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.starkbank.com/v2/brcode-payment/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the brcode entity."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "List of strings to filter response JSON keys. Not available in the SDKs."
+              }
+            ]
+          },
+          "docs": "Get a single brcode by its id."
+        },
+        {
+          "info": {
+            "name": "Update a Brcode Payment",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.starkbank.com/v2/brcode-payment/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the brcode payment entity."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a single brcode payment, if it hasn't been paid yet."
+        },
+        {
+          "info": {
+            "name": "Get a Brcode Payment PDF",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.starkbank.com/v2/brcode-payment/:id/pdf",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the brcode payment entity"
+              }
+            ]
+          },
+          "docs": "Get a brcode payment PDF receipt. You can only get a receipt for payments whose status are either success, processing or created."
+        },
+        {
+          "info": {
+            "name": "List Brcode Payment Logs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.starkbank.com/v2/brcode-payment/log",
+            "params": [
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Filter entities created after this date."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Filter entities created before this date."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "String used to get the next batch of results. Our SDKs handle this for you."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "List of strings to filter response JSON keys. Not available in the SDKs."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results per cursor. Max = 100."
+              },
+              {
+                "name": "paymentIds",
+                "value": "",
+                "type": "query",
+                "description": "Array of payment ids linked to the desired logs."
+              },
+              {
+                "name": "types",
+                "value": "",
+                "type": "query",
+                "description": "Filters logs by log types."
+              }
+            ]
+          },
+          "docs": "Get a paged list of all brcode payment logs. A log tracks a change in the payment entity according to its life cycle."
+        },
+        {
+          "info": {
+            "name": "Get a Brcode Payment Log",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.starkbank.com/v2/brcode-payment/log/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the log entity"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "List of strings to filter response JSON keys. Not available in the SDKs."
+              }
+            ]
+          },
+          "docs": "Get a single brcode payment log by its id."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

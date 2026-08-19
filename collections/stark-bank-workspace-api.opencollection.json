@@ -1,0 +1,132 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Stark Bank Balance Workspace API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Digital-Signature",
+      "value": "{{Digital-Signature}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Workspace",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Workspaces",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.starkbank.com/v2/workspace",
+            "params": [
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "String used to get the next batch of results. Our SDKs handle this for you."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "List of strings to filter response JSON keys. Not available in the SDKs."
+              },
+              {
+                "name": "ids",
+                "value": "",
+                "type": "query",
+                "description": "List of IDs of the Workspaces to be retrieved."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results per cursor. Max = 100."
+              },
+              {
+                "name": "username",
+                "value": "",
+                "type": "query",
+                "description": "Workspace username to be searched."
+              }
+            ]
+          },
+          "docs": "Get a list of Workspaces your credentials have access to in chunks of at most 100. If you need smaller chunks, use the limit parameter."
+        },
+        {
+          "info": {
+            "name": "Create a Workspace",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.starkbank.com/v2/workspace",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Here you can create a brand new Workspace.\nNote: Only Organization credentials are able to create Workspaces.\n"
+        },
+        {
+          "info": {
+            "name": "Get a Workspace",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.starkbank.com/v2/workspace/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the workspace entity."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "List of strings to filter response JSON keys. Not available in the SDKs."
+              }
+            ]
+          },
+          "docs": "Get a single workspace by its id."
+        },
+        {
+          "info": {
+            "name": "Update a Workspace",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.starkbank.com/v2/workspace/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the workspace."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a workspace by passing its id and the fields you want to update."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

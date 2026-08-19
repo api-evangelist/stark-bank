@@ -1,0 +1,106 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Stark Bank Balance Event Attempt API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Digital-Signature",
+      "value": "{{Digital-Signature}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Event Attempt",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List failed Webhook Event delivery attempts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.starkbank.com/v2/event/attempt",
+            "params": [
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Filter entities created after this date."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Filter entities created before this date."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "String used to get the next batch of results. Our SDKs handle this for you."
+              },
+              {
+                "name": "eventIds",
+                "value": "",
+                "type": "query",
+                "description": "List of Event ids to filter attempts. Example: [\"5656565656565656\", \"4545454545454545\"]"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "List of strings to filter response JSON keys. Not available in the SDKs."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results per cursor. Max = 100."
+              },
+              {
+                "name": "webhookIds",
+                "value": "",
+                "type": "query",
+                "description": "list of Webhook ids to filter attempts. Example: [\"5656565656565656\", \"4545454545454545\"]"
+              }
+            ]
+          },
+          "docs": "Get information on failed webhook event delivery attempts."
+        },
+        {
+          "info": {
+            "name": "Get an Event Attempt",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.starkbank.com/v2/event/attempt/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique id of the event attempt entity."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "List of strings to filter response JSON keys. Not available in the SDKs."
+              }
+            ]
+          },
+          "docs": "Get a single event attempt by its id."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

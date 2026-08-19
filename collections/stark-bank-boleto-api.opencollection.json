@@ -1,0 +1,257 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Stark Bank Balance Boleto API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Digital-Signature",
+      "value": "{{Digital-Signature}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Boleto",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Boletos",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.starkbank.com/v2/boleto",
+            "params": [
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Filter entities created after this date."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Filter entities created before this date."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "String used to get the next batch of results. Our SDKs handle this for you."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "List of strings to filter response JSON keys. Not available in the SDKs."
+              },
+              {
+                "name": "ids",
+                "value": "",
+                "type": "query",
+                "description": "List of strings to get specific entities by ids."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results per cursor. Max = 100."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter boletos by the specified status."
+              },
+              {
+                "name": "tags",
+                "value": "",
+                "type": "query",
+                "description": "Filter entities that contain the specified tags."
+              }
+            ]
+          },
+          "docs": "Get a list of non-deleted boletos in chunks of at most 100. If you need smaller chunks, use the limit parameter."
+        },
+        {
+          "info": {
+            "name": "Create Boletos",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.starkbank.com/v2/boleto",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This is how you create a new list of boletos. You can create up to 100 boletos per request. In case a boleto is paid after its due date and there is fine or interest, its amount will be updated with the paid amount. The same is valid if the boleto is paid with a discount."
+        },
+        {
+          "info": {
+            "name": "Get a Boleto",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.starkbank.com/v2/boleto/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the boleto entity."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "List of strings to filter response JSON keys. Not available in the SDKs."
+              }
+            ]
+          },
+          "docs": "Get a single boleto by its id."
+        },
+        {
+          "info": {
+            "name": "Delete a Boleto",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.starkbank.com/v2/boleto/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the boleto entity."
+              }
+            ]
+          },
+          "docs": "Delete a single boleto. We will send a request to CIP to cancel the boleto registration. After the boleto registration is canceled, it won't be possible to pay it anymore.\nNOTE: This action cannot be undone.\n"
+        },
+        {
+          "info": {
+            "name": "Get a Boleto PDF",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.starkbank.com/v2/boleto/:id/pdf",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the boleto entity"
+              },
+              {
+                "name": "hiddenFields",
+                "value": "",
+                "type": "query",
+                "description": "List of fields to be hidden in Boleto pdf. Example: [\"customerAddress\"]."
+              },
+              {
+                "name": "layout",
+                "value": "",
+                "type": "query",
+                "description": "PDF layout. Available options are \"default\" (full page) and \"booklet\" (\"carnê\")."
+              }
+            ]
+          },
+          "docs": "Get a downloadable boleto PDF file. This route is public and does not require the usual authentication headers. However, if you request an invalid boleto ID too many times, your IP will be blocked for this specific route."
+        },
+        {
+          "info": {
+            "name": "List Boleto logs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.starkbank.com/v2/boleto/log",
+            "params": [
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Filter entities created after this date."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Filter entities created before this date."
+              },
+              {
+                "name": "boletoIds",
+                "value": "",
+                "type": "query",
+                "description": "Array of boleto ids that are linked to the logs you desire."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "String used to get the next batch of results. Our SDKs handle this for you."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "List of strings to filter response JSON keys. Not available in the SDKs."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results per cursor. Max = 100."
+              },
+              {
+                "name": "types",
+                "value": "",
+                "type": "query",
+                "description": "Filters logs by log types."
+              }
+            ]
+          },
+          "docs": "Get a paged list of boleto logs. A log tracks a change in the boleto entity according to its life cycle."
+        },
+        {
+          "info": {
+            "name": "Get a Boleto Log",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.starkbank.com/v2/boleto/log/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the log entity"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "List of strings to filter response JSON keys. Not available in the SDKs."
+              }
+            ]
+          },
+          "docs": "Get a single boleto log by its id."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,37 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Stark Bank Balance Public Key API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Digital-Signature",
+      "value": "{{Digital-Signature}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Public Key",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Public Keys",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.starkbank.com/v2/public-key"
+          },
+          "docs": "Get a list of the Stark Bank public keys ordered by creation date from newest to oldest. The most recent public key is the one currently in use by the API. The older keys can be used to verify older messages."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

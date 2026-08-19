@@ -1,0 +1,120 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Stark Bank Balance Payment Request API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Digital-Signature",
+      "value": "{{Digital-Signature}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Payment Request",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Payment Requests",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.starkbank.com/v2/payment-request",
+            "params": [
+              {
+                "name": "centerId",
+                "value": "",
+                "type": "query",
+                "description": "Unique ID of the targeted cost center. You can check out the cost center ID directly on its approval section on our Web Banking. Example: 5656565656565656"
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Filter entities created after this date."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Filter entities created before this date."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "String used to get the next batch of results. Our SDKs handle this for you."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "List of strings to filter response JSON keys. Not available in the SDKs."
+              },
+              {
+                "name": "ids",
+                "value": "",
+                "type": "query",
+                "description": "List of strings to get specific entities by ids."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results per cursor. Max = 100."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort order considered in the response. Options are: \"created\", \"-created\", \"updated\" and \"-updated\". \"-\" means descending order. Default is \"-created\"."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter payment requests by the specified status. Example: success"
+              },
+              {
+                "name": "tags",
+                "value": "",
+                "type": "query",
+                "description": "Filter entities that contain the specified tags."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Filters payment requests by the type inferred from the payment parameter, if it is not a dictionary. Example: boleto-payment"
+              }
+            ]
+          },
+          "docs": "Here you can list and filter payment requests created by the requesting user. We return it paged."
+        },
+        {
+          "info": {
+            "name": "Create Payment Requests",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.starkbank.com/v2/payment-request",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use this route to create new payment requests in our Web Banking approval flow."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

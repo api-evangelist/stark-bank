@@ -1,0 +1,318 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Stark Bank Balance Invoice API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Digital-Signature",
+      "value": "{{Digital-Signature}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Invoice",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Invoices",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.starkbank.com/v2/invoice",
+            "params": [
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Filter entities created after this date."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Filter entities created before this date."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "String used to get the next batch of results. Our SDKs handle this for you."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "List of strings to filter response JSON keys. Not available in the SDKs."
+              },
+              {
+                "name": "ids",
+                "value": "",
+                "type": "query",
+                "description": "List of strings to get specific entities by ids."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results per cursor. Max = 100."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter invoices by the specified status."
+              },
+              {
+                "name": "tags",
+                "value": "",
+                "type": "query",
+                "description": "Filter entities that contain the specified tags."
+              },
+              {
+                "name": "transactionIds",
+                "value": "",
+                "type": "query",
+                "description": "List of transaction IDs linked to the desired invoices."
+              }
+            ]
+          },
+          "docs": "Get a list of invoices in chunks of at most 100. If you need smaller chunks, use the limit parameter."
+        },
+        {
+          "info": {
+            "name": "Create Invoices",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.starkbank.com/v2/invoice",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use this route to create up to 100 new invoices at a time.\nNOTE:If you create an invoice with amount zero, we will accept any amount paid by your customer. Otherwise we will only accept the amount specified in the invoice.\n"
+        },
+        {
+          "info": {
+            "name": "Get an Invoice",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.starkbank.com/v2/invoice/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the invoice entity"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "List of strings to filter response JSON keys. Not available in the SDKs."
+              }
+            ]
+          },
+          "docs": "Get a single invoice by its id."
+        },
+        {
+          "info": {
+            "name": "Update an Invoice",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.starkbank.com/v2/invoice/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the invoice entity."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a single invoice. If the invoice has not yet been paid, you can adjust parameters such as the requested amount, the due datetime and the expiration. If the invoice has already been paid, only the amount can be decreased, which will result in a payment reversal."
+        },
+        {
+          "info": {
+            "name": "Get an Invoice QR Code",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.starkbank.com/v2/invoice/:id/qrcode",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the invoice entity."
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "Number of pixels in each 'box' of the QR code. Minimum = 1 and maximum = 50. Default value = 7."
+              }
+            ]
+          },
+          "docs": "Get the invoice QR Code png file. Similarly to the Boleto PDF, we create a QR Code image file with the invoice data so that your customer can pay it through Pix."
+        },
+        {
+          "info": {
+            "name": "Get an Invoice PDF",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.starkbank.com/v2/invoice/:id/pdf",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the invoice entity."
+              }
+            ]
+          },
+          "docs": "Get the invoice PDF file. Similarly to the Boleto PDF, we create a PDF file with the invoice data and the QR Code so that your customer can pay it through Pix. The same PDF can also be accessed by the public \"pdf\" parameter returned in the Invoice JSON. This link is the one you should send to your customers."
+        },
+        {
+          "info": {
+            "name": "List Invoice Logs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.starkbank.com/v2/invoice/log",
+            "params": [
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Filter entities created after this date."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Filter entities created before this date."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "String used to get the next batch of results. Our SDKs handle this for you."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "List of strings to filter response JSON keys. Not available in the SDKs."
+              },
+              {
+                "name": "invoiceIds",
+                "value": "",
+                "type": "query",
+                "description": "Array of invoice ids that are linked to the logs you desire."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results per cursor. Max = 100."
+              },
+              {
+                "name": "types",
+                "value": "",
+                "type": "query",
+                "description": "Filters logs by log types."
+              }
+            ]
+          },
+          "docs": "Get a paged list of invoice logs. A log tracks a change in the invoice entity according to its life cycle."
+        },
+        {
+          "info": {
+            "name": "Get an Invoice Log",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.starkbank.com/v2/invoice/log/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the log entity."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "List of strings to filter response JSON keys. Not available in the SDKs."
+              }
+            ]
+          },
+          "docs": "Get a single invoice Log by its id."
+        },
+        {
+          "info": {
+            "name": "Get a reversed Invoice Log PDF",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.starkbank.com/v2/invoice/log/:id/pdf",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the log invoice entity."
+              }
+            ]
+          },
+          "docs": "Whenever an Invoice is successfully reversed, a reversed log will be created. To retrieve a specific reversal receipt, you can request the corresponding log PDF."
+        },
+        {
+          "info": {
+            "name": "Get an Invoice Payment information",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.starkbank.com/v2/invoice/:id/payment",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the invoice entity."
+              }
+            ]
+          },
+          "docs": "Once an invoice has been paid, you can get the payment information using the Invoice. Payment sub-resource."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

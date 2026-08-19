@@ -1,0 +1,225 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Stark Bank Balance Split Receiver API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Digital-Signature",
+      "value": "{{Digital-Signature}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Split Receiver",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Split Receivers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.starkbank.com/v2/split-receiver",
+            "params": [
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Filter entities created after this date."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Filter entities created before this date."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "String used to get the next batch of results. Our SDKs handle this for you."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "List of strings to filter response JSON keys. Not available in the SDKs."
+              },
+              {
+                "name": "ids",
+                "value": "",
+                "type": "query",
+                "description": "List of strings to get specific entities by ids."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results per cursor. Max = 100."
+              },
+              {
+                "name": "receiverIds",
+                "value": "",
+                "type": "query",
+                "description": "List of receiver ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter split receivers by the specified status."
+              },
+              {
+                "name": "tags",
+                "value": "",
+                "type": "query",
+                "description": "Filter entities that contain the specified tags."
+              },
+              {
+                "name": "taxId",
+                "value": "",
+                "type": "query",
+                "description": "filter for splitReceivers sent to the specified tax ID. ex: '012.345.678-90'"
+              },
+              {
+                "name": "transactionIds",
+                "value": "",
+                "type": "query",
+                "description": "List of transaction IDs linked to the desired splitReceivers. ex: ['5656565656565656', '4545454545454545']"
+              }
+            ]
+          },
+          "docs": "Get a list of Split Receivers in chunks of at most 100. If you need smaller chunks, use the limit parameter."
+        },
+        {
+          "info": {
+            "name": "Create Split Receiver",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.starkbank.com/v2/split-receiver",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Send a list of Split Receiver objects for creation in the Stark Bank API"
+        },
+        {
+          "info": {
+            "name": "Get a Split Receiver",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.starkbank.com/v2/split-receiver/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the Split Receiver entity"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "List of strings to filter response JSON keys. Not available in the SDKs."
+              }
+            ]
+          },
+          "docs": "Retrieve a single Split Receiver object previously created in the Stark Bank API by its id."
+        },
+        {
+          "info": {
+            "name": "List Split Receiver Logs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.starkbank.com/v2/split-receiver/log",
+            "params": [
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Filter entities created after this date."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Filter entities created before this date."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "String used to get the next batch of results. Our SDKs handle this for you."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "List of strings to filter response JSON keys. Not available in the SDKs."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results per cursor. Max = 100."
+              },
+              {
+                "name": "receiverIds",
+                "value": "",
+                "type": "query",
+                "description": "List of Split Receiver ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']."
+              },
+              {
+                "name": "types",
+                "value": "",
+                "type": "query",
+                "description": "filter retrieved objects by event types. ex: 'processing' or 'success'"
+              }
+            ]
+          },
+          "docs": "Get a paged list of Split Receiver logs. A log tracks a change in the Split Receiver entity according to its life cycle."
+        },
+        {
+          "info": {
+            "name": "Get a Split Receiver Log",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.starkbank.com/v2/split-receiver/log/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the log entity."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "List of strings to filter response JSON keys. Not available in the SDKs."
+              }
+            ]
+          },
+          "docs": "Get a single Split Receiver Log by its id."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

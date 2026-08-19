@@ -2,11 +2,9 @@ generated: '2026-07-21'
 method: derived
 status: candidate
 source: openapi/stark-bank-openapi-original.yml
-note: >-
-  No official hosted/remote Stark Bank MCP server was found (checked docs,
-  npm @modelcontextprotocol, and MCP registries). This is a DERIVED candidate
-  tool surface mapped from the OpenAPI operations, one tool per marquee
-  operationId. Not published by Stark Bank.
+note: No official hosted/remote Stark Bank MCP server was found (checked docs, npm @modelcontextprotocol,
+  and MCP registries). This is a DERIVED candidate tool surface mapped from the OpenAPI operations, one
+  tool per marquee operationId. Not published by Stark Bank.
 server:
   name: stark-bank
   transport: http
@@ -53,3 +51,9 @@ tools:
 - name: create_split_receiver
   description: Create a split receiver for marketplace receivables
   source_operation: openapi/stark-bank-openapi-original.yml#create-splitReceiver
+deployment:
+  mode: none
+  verified: derived
+  tools: 14
+  checked: '2026-08-12'
+  source: catalog MCP census

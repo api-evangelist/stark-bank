@@ -1,0 +1,63 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Stark Bank Balance Institutions API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Digital-Signature",
+      "value": "{{Digital-Signature}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Institutions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Institutions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.starkbank.com/v2/institution",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results per cursor. Max = 100."
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Part of the institution name to be searched. Example: \"stark\""
+              },
+              {
+                "name": "spiCodes",
+                "value": "",
+                "type": "query",
+                "description": "List of SPI (Pix) codes to be searched. Example: [\"20018183\"]"
+              },
+              {
+                "name": "strCodes",
+                "value": "",
+                "type": "query",
+                "description": "List of STR (Ted) codes to be searched. Example: [\"260\"]"
+              }
+            ]
+          },
+          "docs": "Get a list of institutions."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

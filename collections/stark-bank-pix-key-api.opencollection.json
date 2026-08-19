@@ -1,0 +1,106 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Stark Bank Balance Pix Key API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Digital-Signature",
+      "value": "{{Digital-Signature}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Pix Key",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List your DICT Keys",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.starkbank.com/v2/dict-key",
+            "params": [
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Filter entities created after this date."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Filter entities created before this date."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "String used to get the next batch of results. Our SDKs handle this for you."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "List of strings to filter response JSON keys. Not available in the SDKs."
+              },
+              {
+                "name": "ids",
+                "value": "",
+                "type": "query",
+                "description": "List of strings to get specific entities by ids."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results per cursor. Max = 100."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter dicts by the specified status."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "DICT Key type. Options are: \"cpf\", \"cnpj\", \"phone\", \"email\" or \"evp\"."
+              }
+            ]
+          },
+          "docs": "Get a list of the DICT Keys you own (or have owned) in chunks of at most 100. If you need smaller chunks, use the limit parameter."
+        },
+        {
+          "info": {
+            "name": "Get a DICT Key",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.starkbank.com/v2/dict-key/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the dict key. Examples: \"jon.snow@starkbank.com\", \"012.345.678-90\""
+              }
+            ]
+          },
+          "docs": "Get a single DICT key by its id. This method includes keys you do not own. You can use it to retrieve a key's information before creating Transfers.\nNote: Try to avoid looking up DICT keys without sending transfers afterwards, since Bacen's system will block users making too many standalone requests in a short timespan. Invalid key searches also count towards this block.\nNote: The encrypted parameters can be used to create a transfer without the need to decrypt.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

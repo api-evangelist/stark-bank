@@ -1,0 +1,230 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Stark Bank Balance Merchant Purchase API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Digital-Signature",
+      "value": "{{Digital-Signature}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Merchant Purchase",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Merchant Purchases",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.starkbank.com/v2/merchant-purchase",
+            "params": [
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Filter entities created after this date."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Filter entities created before this date."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "String used to get the next batch of results. Our SDKs handle this for you."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "List of strings to filter response JSON keys. Not available in the SDKs."
+              },
+              {
+                "name": "ids",
+                "value": "",
+                "type": "query",
+                "description": "List of strings to get specific entities by ids."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results per cursor. Max = 100."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter purchases by the specified status, such as: created, approved, denied, confirmed, paid, pending, canceled, voided, failed."
+              },
+              {
+                "name": "tags",
+                "value": "",
+                "type": "query",
+                "description": "Filter entities that contain the specified tags."
+              }
+            ]
+          },
+          "docs": "Get a list of merchant purchases in chunks of at most 100. If you need smaller chunks, use the limit parameter."
+        },
+        {
+          "info": {
+            "name": "Create Merchant Purchase",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.starkbank.com/v2/merchant-purchase",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This route is used to charge a card that has been previously saved.\nCards can only be used in this route once a previous purchase was approved through a Merchant Session Purchase.\n"
+        },
+        {
+          "info": {
+            "name": "Get a Merchant Purchase",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.starkbank.com/v2/merchant-purchase/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the merchant purchase that needs to be retrieved."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "List of strings to filter response JSON keys. Not available in the SDKs."
+              }
+            ]
+          },
+          "docs": "Retrieve detailed information about a specific purchase by its id."
+        },
+        {
+          "info": {
+            "name": "Update a Merchant Purchase",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.starkbank.com/v2/merchant-purchase/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the purchase entity."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a single purchase. If the purchase is currently approved, you can only update the status to canceled and set the amount to 0. This action cancels the authorization. If the purchase is currently confirmed, you can update the status to reversed and adjust the amount to a lower value. This action debits the difference and reverses the purchase, partially or totally. If the purchase is partially reversed, its status will remain confirmed. However, if the purchase is fully reversed, its status"
+        },
+        {
+          "info": {
+            "name": "List Merchant Purchase Logs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.starkbank.com/v2/merchant-purchase/log",
+            "params": [
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Filter entities created after this date."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Filter entities created before this date."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "String used to get the next batch of results. Our SDKs handle this for you."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "List of strings to filter response JSON keys. Not available in the SDKs."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results per cursor. Max = 100."
+              },
+              {
+                "name": "purchaseIds",
+                "value": "",
+                "type": "query",
+                "description": "Filter the merchant purchase ids to only include its corresponding logs"
+              },
+              {
+                "name": "types",
+                "value": "",
+                "type": "query",
+                "description": "Filters logs by log types."
+              }
+            ]
+          },
+          "docs": "Get a paged list of merchant purchase logs.\nA log tracks a change in the purchase entity according to its life cycle.\n"
+        },
+        {
+          "info": {
+            "name": "Get a Merchant Purchase Log",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.starkbank.com/v2/merchant-purchase/log/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the merchant purchase that needs to be retrieved."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "List of strings to filter response JSON keys. Not available in the SDKs."
+              }
+            ]
+          },
+          "docs": "Get a single merchant purchase log by its id."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

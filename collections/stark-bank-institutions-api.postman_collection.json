@@ -1,0 +1,329 @@
+{
+  "item": [
+    {
+      "id": "481d100f-7482-48fc-ae9c-2b2c461e1068",
+      "name": "Institutions",
+      "description": {
+        "content": "An Institution is used to query institutions registered by the Brazilian Central Bank for Pix and Ted transactions.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "7be920f2-3e84-4071-8fac-1f9001137da0",
+          "name": "List Institutions",
+          "request": {
+            "name": "List Institutions",
+            "description": {
+              "content": "Get a list of institutions.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2",
+                "institution"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "Number of results per cursor. Max = 100."
+                },
+                {
+                  "disabled": false,
+                  "key": "search",
+                  "value": "<string>",
+                  "description": "Part of the institution name to be searched. Example: \"stark\""
+                },
+                {
+                  "disabled": false,
+                  "key": "spiCodes",
+                  "value": "<string>",
+                  "description": "List of SPI (Pix) codes to be searched. Example: [\"20018183\"]"
+                },
+                {
+                  "disabled": false,
+                  "key": "spiCodes",
+                  "value": "<string>",
+                  "description": "List of SPI (Pix) codes to be searched. Example: [\"20018183\"]"
+                },
+                {
+                  "disabled": false,
+                  "key": "strCodes",
+                  "value": "<string>",
+                  "description": "List of STR (Ted) codes to be searched. Example: [\"260\"]"
+                },
+                {
+                  "disabled": false,
+                  "key": "strCodes",
+                  "value": "<string>",
+                  "description": "List of STR (Ted) codes to be searched. Example: [\"260\"]"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "1d07d1b1-8e46-4076-a4d2-36b66ea70a44",
+              "name": "Successful operation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "institution"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "search",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "spiCodes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "spiCodes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "strCodes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "strCodes",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Digital-Signature",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "739b3186-ab54-4d20-ad49-589c92d07367",
+              "name": "Client error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "institution"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "search",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "spiCodes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "spiCodes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "strCodes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "strCodes",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Digital-Signature",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1d431c26-fd3d-4666-abe1-3c278c4fdbb8",
+              "name": "Server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "institution"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "search",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "spiCodes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "spiCodes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "strCodes",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "strCodes",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Digital-Signature",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    },\n    {\n      \"code\": \"string\",\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.starkbank.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "Digital-Signature"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "300d65bb-2e59-47ee-8413-e871138a2764",
+    "name": "Stark Bank Balance Institutions API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "This is our second API version. It is another small step towards launching the product we want to create for you, but it's a giant leap for the brazilian financial market. We created the first banking API in Brazil and we are proud of it.\nOur API is RESTFul. This means we use predictable, resource-oriented URLs to do banking operations. The API itself speaks exclusively in JSON, including errors, but our SDK libraries convert responses to appropriate language-specific objects.\nWant to check our OpenAPI 3.1 specification? You can download our yaml file right here.\nYou can also try our Postman collection. Download it here.\n\n\nContact Support:\n Name: Stark Bank Developers\n Email: help@starkbank.com",
+      "type": "text/plain"
+    }
+  }
+}

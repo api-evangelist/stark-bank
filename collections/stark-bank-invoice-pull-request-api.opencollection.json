@@ -1,0 +1,232 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Stark Bank Balance Invoice Pull Request API",
+    "version": "v2"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Digital-Signature",
+      "value": "{{Digital-Signature}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Invoice Pull Request",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Invoice Pull Requests",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.starkbank.com/v2/invoice-pull-request",
+            "params": [
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Filter entities created after this date."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Filter entities created before this date."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "String used to get the next batch of results. Our SDKs handle this for you."
+              },
+              {
+                "name": "externalIds",
+                "value": "",
+                "type": "query",
+                "description": "List of external IDs linked to the desired pull requests."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "List of strings to filter response JSON keys. Not available in the SDKs."
+              },
+              {
+                "name": "ids",
+                "value": "",
+                "type": "query",
+                "description": "List of strings to get specific entities by ids."
+              },
+              {
+                "name": "invoiceIds",
+                "value": "",
+                "type": "query",
+                "description": "List of invoice IDs linked to the desired pull requests."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results per cursor. Max = 100."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter invoice pull request by the specified status."
+              },
+              {
+                "name": "subscriptionIds",
+                "value": "",
+                "type": "query",
+                "description": "List of subscription IDs linked to the desired pull requests."
+              },
+              {
+                "name": "tags",
+                "value": "",
+                "type": "query",
+                "description": "Filter entities that contain the specified tags."
+              }
+            ]
+          },
+          "docs": "Here you can list and filter all invoice pull requests you have made. We return it paged."
+        },
+        {
+          "info": {
+            "name": "Create Invoice Pull Requests",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.starkbank.com/v2/invoice-pull-request",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use this route to create new invoice pull requests."
+        },
+        {
+          "info": {
+            "name": "Get an Invoice Pull Request",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.starkbank.com/v2/invoice-pull-request/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "String used to get the specific invoice pull request by its ID."
+              }
+            ]
+          },
+          "docs": "Get a single Invoice Pull Request by its id."
+        },
+        {
+          "info": {
+            "name": "Cancel an Invoice Pull Request",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.starkbank.com/v2/invoice-pull-request/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the invoice pull request entity."
+              }
+            ]
+          },
+          "docs": "Cancel a single Invoice Pull Request."
+        },
+        {
+          "info": {
+            "name": "List Invoice Pull Request Logs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.starkbank.com/v2/invoice-pull-request/log",
+            "params": [
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Filter entities created after this date."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Filter entities created before this date."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "String used to get the next batch of results. Our SDKs handle this for you."
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "List of strings to filter response JSON keys. Not available in the SDKs."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Number of results per cursor. Max = 100."
+              },
+              {
+                "name": "requestIds",
+                "value": "",
+                "type": "query",
+                "description": "List of strings to get specific entities by ids."
+              },
+              {
+                "name": "types",
+                "value": "",
+                "type": "query",
+                "description": "Filter payment requests by the specified types. Example: confirmed"
+              }
+            ]
+          },
+          "docs": "Get a paged list of invoice pull request logs. A log tracks a change in the entity according to its life cycle."
+        },
+        {
+          "info": {
+            "name": "Get an Invoice Pull Request Log",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.starkbank.com/v2/invoice-pull-request/log/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "String used to get the specific invoice pull request log by its ID."
+              }
+            ]
+          },
+          "docs": "Get a single invoice pull request log by its id."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
