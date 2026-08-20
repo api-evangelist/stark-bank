@@ -44,6 +44,16 @@ tags:
 - Boleto
 - Banking as a Service
 - Brazil
+- Financial-Services
+tags_raw:
+- Company
+- Fintech
+- Banking
+- Payments
+- Pix
+- Boleto
+- Banking as a Service
+- Brazil
 - Financial Services
 maintainers:
 - FN: Kin Lane
@@ -61,6 +71,8 @@ apis:
   humanURL: https://docs.starkbank.com/api
   baseURL: https://api.starkbank.com
   tags:
+  - Balances
+  tags_raw:
   - Balance
   properties:
   - type: OpenAPI
@@ -290,6 +302,8 @@ apis:
   humanURL: https://docs.starkbank.com/api
   baseURL: https://api.starkbank.com
   tags:
+  - institutions
+  tags_raw:
   - Institutions
   properties:
   - type: OpenAPI
