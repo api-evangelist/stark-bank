@@ -1,0 +1,118 @@
+slug: stark-bank
+provider: Stark Bank
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Banking & Capital Markets
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 11
+edges:
+- tag: Transfer
+  spec_file: stark-bank-transfer-api-openapi.yml
+  capability_id: BC-1340.10
+  capability_id_l1: BC-1340
+  capability_name: Payment Initiation Management
+  confidence: 0.85
+  evidence: POST /v2/transfer  create-transfer  Create Transfers; DELETE ... Cancel a scheduled Transfer
+  reason: Creation, scheduling and cancellation of Pix/TED transfers is payment instruction capture, validation
+    and authorisation.
+- tag: Boleto Payment
+  spec_file: stark-bank-boleto-payment-api-openapi.yml
+  capability_id: BC-1340.10
+  capability_id_l1: BC-1340
+  capability_name: Payment Initiation Management
+  confidence: 0.78
+  evidence: POST /v2/boleto-payment  create-boletoPayment  "Create Boleto Payments"
+  reason: Creation, cancellation and status logging of outbound boleto payment instructions — capture,
+    validation and authorisation of payment instructions.
+- tag: Dynamic Brcode
+  spec_file: stark-bank-dynamic-brcode-api-openapi.yml
+  capability_id: BC-1340
+  capability_id_l1: BC-1340
+  capability_name: Payments & Card Management
+  confidence: 0.78
+  evidence: POST /v2/dynamic-brcode  create-dynamicBrcode  Create Dynamic Brcodes
+  reason: Dynamic BR Codes are Pix QR payment codes used to collect money ('Businesses collect money with
+    Pix Invoices, Pix QR codes'), so this is payment instruction/instrument creation on a payment rail.
+    L1 Payments & Card Management; ambiguous between Payment Initiation and Real-Time Payment sub-capabilities.
+- tag: Merchant Purchase
+  spec_file: stark-bank-merchant-purchase-api-openapi.yml
+  capability_id: BC-1340.70
+  capability_id_l1: BC-1340
+  capability_name: Card Transaction Processing Management
+  confidence: 0.78
+  evidence: POST /v2/merchant-purchase  create-merchantPurchase  Create Merchant Purchase ... PATCH /v2/merchant-purchase/{id}  Update
+    a Merchant Purchase
+  reason: Creation and lifecycle of card purchases (acquiring/authorisation) matching the vendor's 'card
+    payments' collection product; maps to card transaction processing.
+- tag: Payment Request
+  spec_file: stark-bank-payment-request-api-openapi.yml
+  capability_id: BC-1340.10
+  capability_id_l1: BC-1340
+  capability_name: Payment Initiation Management
+  confidence: 0.78
+  evidence: POST /v2/payment-request  create-paymentRequest  Create Payment Requests
+  reason: Payment requests are payment instructions submitted for approval/authorisation at a regulated
+    bank, i.e. payment initiation capture and authorisation.
+- tag: Utility Payment
+  spec_file: stark-bank-utility-payment-api-openapi.yml
+  capability_id: BC-1340.10
+  capability_id_l1: BC-1340
+  capability_name: Payment Initiation Management
+  confidence: 0.78
+  evidence: POST /v2/utility-payment  create-utilityPayment  Create Utility Payments
+  reason: Issuing payments of utility bills (boletos) from the account — payment initiation and execution.
+- tag: Payment Preview
+  spec_file: stark-bank-payment-preview-api-openapi.yml
+  capability_id: BC-1340.10
+  capability_id_l1: BC-1340
+  capability_name: Payment Initiation Management
+  confidence: 0.72
+  evidence: POST /v2/payment-preview  create-paymentPreview  Create a Payment Preview
+  reason: Pre-validation/preview of a payment instruction before it is issued, part of payment instruction
+    capture and validation at this Brazilian bank's money-movement API.
+- tag: Tax Payment
+  spec_file: stark-bank-tax-payment-api-openapi.yml
+  capability_id: BC-1340.10
+  capability_id_l1: BC-1340
+  capability_name: Payment Initiation Management
+  confidence: 0.72
+  evidence: POST /v2/tax-payment  create-taxPayment  Create Tax Payments
+  reason: The API issues payments of Brazilian tax bills from the account — payment instruction capture
+    and execution, not tax compliance/filing management.
+- tag: Boleto
+  spec_file: stark-bank-boleto-api-openapi.yml
+  capability_id: BC-1340
+  capability_id_l1: BC-1340
+  capability_name: Payments & Card Management
+  confidence: 0.7
+  evidence: POST /v2/boleto  create-boleto  "Create Boletos"; GET /v2/boleto/{id}/pdf "Get a Boleto PDF"
+  reason: Issuance and lifecycle of boletos, the Brazilian bank-issued collection instrument used to collect
+    money — payments instrument management. Unclear whether initiation or processing sub-capability fits
+    best.
+- tag: Brcode Payment
+  spec_file: stark-bank-brcode-payment-api-openapi.yml
+  capability_id: BC-1340.10
+  capability_id_l1: BC-1340
+  capability_name: Payment Initiation Management
+  confidence: 0.7
+  evidence: POST /v2/brcode-payment  create-brcodePayment  "Create Brcode Payments"
+  reason: Initiation of BR Code (Pix QR) payment instructions with update and log endpoints. Payment initiation
+    is the safest fit; could alternatively be the real-time payment rail sub-capability.
+- tag: Invoice
+  spec_file: stark-bank-invoice-api-openapi.yml
+  capability_id: BC-1340
+  capability_id_l1: BC-1340
+  capability_name: Payments & Card Management
+  confidence: 0.7
+  evidence: POST /v2/invoice  create-invoice  Create Invoices ... GET /v2/invoice/{id}/qrcode  Get an
+    Invoice QR Code ... GET /v2/invoice/{id}/payment  Get an Invoice Payment information
+  reason: Stark Bank Invoices are Pix charges (cobranças) with QR codes and payment status used to collect
+    money, i.e. issuance and tracking of a payment collection instrument on a bank rail, not accounting
+    AR ledger management. L1 Payments & Card Management.
