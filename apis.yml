@@ -314,7 +314,7 @@ apis:
   humanURL: https://docs.starkbank.com/api
   baseURL: https://api.starkbank.com
   tags:
-  - institutions
+  - Institutions
   tags_raw:
   - Institutions
   properties:
