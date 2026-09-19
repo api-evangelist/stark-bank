@@ -351,6 +351,8 @@ apis:
   humanURL: https://docs.starkbank.com/api
   baseURL: https://api.starkbank.com
   tags:
+  - Invoices
+  tags_raw:
   - Invoice
   properties:
   - type: OpenAPI
