@@ -10,6 +10,11 @@ provenance:
   grounding: every price_text was found verbatim in the fetched page text
 audience: business-product
 pricing_basis: usage-other
+delivery:
+  delivery: managed
+  method: page
+  read: '2026-09-20'
+  managed_tier: Workspace
 published: true
 note: Per-transaction fee schedule for banking/payment services plus small monthly workspace fee; volume-based
   and committed-use discounts not quantified.
