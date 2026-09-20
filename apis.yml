@@ -837,6 +837,8 @@ apis:
   - type: DataModel
     url: data-model/stark-bank-data-model.yml
 common:
+- type: Plans
+  url: plans/stark-bank-plans-pricing.yml
 - type: CapabilityMap
   url: capabilities/stark-bank-capability-edges.yml
   name: Stark Bank Business Capability Map

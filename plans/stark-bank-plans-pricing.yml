@@ -1,0 +1,110 @@
+# Pricing transcribed from the provider's own page — see provenance. Numbers are quoted, not derived.
+generated: '2026-09-20'
+method: searched
+source: https://starkbank.com/pricing
+sources:
+- https://starkbank.com/pricing
+provenance:
+  tool: planning/api-economics/harvest_pricing.py
+  run: 20260920T120546
+  grounding: every price_text was found verbatim in the fetched page text
+audience: business-product
+pricing_basis: usage-other
+published: true
+note: Per-transaction fee schedule for banking/payment services plus small monthly workspace fee; volume-based
+  and committed-use discounts not quantified.
+plan_count: 17
+currency: BRL
+plans:
+- name: Account opening and maintenance
+  price_text: R$ 0/month
+  price: 0
+  currency: BRL
+  period: month
+  unit: account
+- name: Workspace
+  price_text: R$ 1.00/month
+  price: 1
+  currency: BRL
+  period: month
+  unit: workspace
+- name: Corporate Card - Physical Card
+  price_text: R$ 0
+  price: 0
+  currency: BRL
+  period: one-time
+  unit: card
+- name: Corporate Card - Virtual Card
+  price_text: R$ 0
+  price: 0
+  currency: BRL
+  period: one-time
+  unit: card
+- name: Late payment fee
+  price_text: 2%
+  price: 2
+  period: per-use
+  unit: percent of payment
+- name: Late payment interest
+  price_text: 1% per month
+  price: 1
+  period: month
+  unit: percent
+- name: International Shopping
+  price_text: PTAX + 2% + IOF
+  period: per-use
+  unit: transaction
+- name: Invoice - Processing
+  price_text: R$ 0,15
+  price: 0.15
+  currency: BRL
+  period: per-use
+  unit: invoice
+- name: Invoice - Settlement
+  price_text: R$ 0,50
+  price: 0.5
+  currency: BRL
+  period: per-use
+  unit: invoice
+- name: Boleto - Settlement
+  price_text: R$ 2,00
+  price: 2
+  currency: BRL
+  period: per-use
+  unit: boleto
+- name: Searches on Boleto Holmes
+  price_text: R$ 0,25
+  price: 0.25
+  currency: BRL
+  period: per-use
+  unit: search
+- name: Split payment
+  price_text: 0.20% total TPV
+  price: 0.2
+  period: per-use
+  unit: percent of TPV
+- name: Transfer - Pix
+  price_text: R$ 0,50
+  price: 0.5
+  currency: BRL
+  period: per-use
+  unit: transfer
+- name: Pix Key search
+  price_text: R$ 0,15
+  price: 0.15
+  currency: BRL
+  period: per-use
+  unit: search
+- name: Card Payments - Debit
+  price_text: 3,5%
+  price: 3.5
+  period: per-use
+  unit: percent of transaction
+- name: Card Payments - Credit
+  price_text: 3,5%
+  price: 3.5
+  period: per-use
+  unit: percent of transaction
+- name: Committed Use Discounts
+  price_text: Contact our sales team.
+  period: none
