@@ -1,16 +1,8 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Stark Bank Balance Webhook API
+  title: Stark Bank Webhook API
   version: v2
-  description: 'This is our second API version. It is another small step towards launching the product we want to create for you, but it''s a giant leap for the brazilian financial market. We created the first banking API in Brazil and we are proud of it.
-
-    Our API is RESTFul. This means we use predictable, resource-oriented URLs to do banking operations. The API itself speaks exclusively in JSON, including errors, but our SDK libraries convert responses to appropriate language-specific objects.
-
-    Want to check our OpenAPI 3.1 specification? You can download our yaml file right here.
-
-    You can also try our Postman collection. Download it here.
-
-    '
+  description: This is our second API version.
   contact:
     name: Stark Bank Developers
     email: help@starkbank.com
@@ -26,17 +18,7 @@ security:
 - digitalSignature: []
 tags:
 - name: Webhook
-  description: 'You can create webhook subscriptions to receive events whenever a new log is created. We send the event by making a POST request to your endpoint URL. The event will be delivered with a digital signature (headers["Digital-Signature"]), which can be verified using the Stark Bank public key. This key is recoverable by a GET request to /v2/public-key.
-
-    If your endpoint URL does not return a 200 status, the webhook service will try again at most three times. The interval between each attempt is 5 min, 30 min and finally 120 min. In case the event cannot be delivered after those three attempts, we will stop trying to deliver the message.
-
-    The event sent to the endpoint URL has the structure shown to the right, where the content of the log sent will depend on the event subscription.
-
-    NOTE 1: Registered webhooks will only work for services used in that same version. For example, if you create a transfer in v2, its logs will only trigger v2 webhooks and v1 webhooks would ignore its events.
-
-    NOTE 2: Even if you use Webhook, we strongly recommend that you create a daily task to get all undelivered events and set them as delivered. It''s important to add redundancy and resilience to your system, preventing you from having outdated information just in case your system is temporarily unable to receive our Webhook events.
-
-    '
+  description: You can create webhook subscriptions to receive events whenever a new log is created.
 paths:
   /v2/webhook:
     post:
@@ -178,9 +160,7 @@ paths:
       - Webhook
       description: 'Delete a single Webhook subscription.
 
-        NOTE: This action cannot be undone.
-
-        '
+        NOTE: This action cannot be undone.'
       parameters:
       - name: id
         in: path
@@ -209,13 +189,6 @@ paths:
                 $ref: '#/components/schemas/Errors'
 components:
   schemas:
-    Errors:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
     Error:
       type: object
       properties:
@@ -225,6 +198,13 @@ components:
         message:
           type: string
           description: Human-readable error message
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     digitalSignature:
       type: apiKey

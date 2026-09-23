@@ -1,16 +1,8 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
   title: Stark Bank Balance API
   version: v2
-  description: 'This is our second API version. It is another small step towards launching the product we want to create for you, but it''s a giant leap for the brazilian financial market. We created the first banking API in Brazil and we are proud of it.
-
-    Our API is RESTFul. This means we use predictable, resource-oriented URLs to do banking operations. The API itself speaks exclusively in JSON, including errors, but our SDK libraries convert responses to appropriate language-specific objects.
-
-    Want to check our OpenAPI 3.1 specification? You can download our yaml file right here.
-
-    You can also try our Postman collection. Download it here.
-
-    '
+  description: This is our second API version.
   contact:
     name: Stark Bank Developers
     email: help@starkbank.com
@@ -28,9 +20,7 @@ tags:
 - name: Balance
   description: 'The balance entity holds the total funds available in your workspace and can be calculated as the sum of its transactions (cash-in + cash-out).
 
-    Therefore, you can also interpret Transactions as balance change logs.
-
-    '
+    Therefore, you can also interpret Transactions as balance change logs.'
 paths:
   /v2/balance:
     get:
@@ -60,13 +50,6 @@ paths:
                 $ref: '#/components/schemas/Errors'
 components:
   schemas:
-    Errors:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
     Error:
       type: object
       properties:
@@ -76,6 +59,13 @@ components:
         message:
           type: string
           description: Human-readable error message
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     digitalSignature:
       type: apiKey

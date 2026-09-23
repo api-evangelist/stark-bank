@@ -1,16 +1,8 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Stark Bank Balance Utility Payment API
+  title: Stark Bank Utility Payment API
   version: v2
-  description: 'This is our second API version. It is another small step towards launching the product we want to create for you, but it''s a giant leap for the brazilian financial market. We created the first banking API in Brazil and we are proud of it.
-
-    Our API is RESTFul. This means we use predictable, resource-oriented URLs to do banking operations. The API itself speaks exclusively in JSON, including errors, but our SDK libraries convert responses to appropriate language-specific objects.
-
-    Want to check our OpenAPI 3.1 specification? You can download our yaml file right here.
-
-    You can also try our Postman collection. Download it here.
-
-    '
+  description: This is our second API version.
   contact:
     name: Stark Bank Developers
     email: help@starkbank.com
@@ -215,9 +207,7 @@ paths:
       - Utility Payment
       description: 'Cancel a scheduled utility payment. You can only cancel utility payments before they start being processed.
 
-        NOTE:Payments that have already been processed can be deleted, but not cancelled.
-
-        '
+        NOTE:Payments that have already been processed can be deleted, but not cancelled.'
       parameters:
       - name: id
         in: path
@@ -397,13 +387,6 @@ paths:
                 $ref: '#/components/schemas/Errors'
 components:
   schemas:
-    Errors:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
     Error:
       type: object
       properties:
@@ -413,6 +396,13 @@ components:
         message:
           type: string
           description: Human-readable error message
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     digitalSignature:
       type: apiKey
