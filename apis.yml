@@ -58,7 +58,7 @@ tags:
 - Boleto
 - Banking as a Service
 - Brazil
-- Financial-Services
+- Financial Services
 tags_raw:
 - Company
 - Fintech
@@ -69,6 +69,7 @@ tags_raw:
 - Banking as a Service
 - Brazil
 - Financial Services
+- Financial-Services
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com

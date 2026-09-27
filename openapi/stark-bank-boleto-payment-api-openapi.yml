@@ -394,6 +394,13 @@ paths:
                 $ref: '#/components/schemas/Errors'
 components:
   schemas:
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
     Error:
       type: object
       properties:
@@ -403,13 +410,6 @@ components:
         message:
           type: string
           description: Human-readable error message
-    Errors:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
   securitySchemes:
     digitalSignature:
       type: apiKey
