@@ -48,7 +48,7 @@ x-tier: stub
 x-tier-reason: portfolio-lead
 specificationVersion: '0.23'
 created: '2026-07-17'
-modified: '2026-07-21'
+modified: '2026-10-06'
 tags:
 - Company
 - Fintech
@@ -838,6 +838,8 @@ apis:
   - type: DataModel
     url: data-model/stark-bank-data-model.yml
 common:
+- url: https://blog.starkbank.com/feed/
+  type: BlogRSS
 - type: Plans
   url: plans/stark-bank-plans-pricing.yml
 - type: CapabilityMap
