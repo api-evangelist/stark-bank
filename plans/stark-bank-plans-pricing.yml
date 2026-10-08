@@ -113,3 +113,152 @@ plans:
 - name: Committed Use Discounts
   price_text: Contact our sales team.
   period: none
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - free
+  - hybrid
+  - metered
+  - subscription
+  units:
+  - data
+  - money
+  - object
+  - transaction
+  plans:
+  - name: Account opening and maintenance
+    access: other
+    model: metered
+    model_how: derived
+    units:
+    - object
+    periods:
+    - month
+  - name: Workspace
+    access: other
+    model: hybrid
+    model_how: derived
+    units:
+    - object
+    periods:
+    - month
+  - name: Corporate Card - Physical Card
+    access: other
+    model: free
+    model_how: derived
+    units:
+    - other
+    periods:
+    - one-time
+  - name: Corporate Card - Virtual Card
+    access: other
+    model: free
+    model_how: derived
+    units:
+    - other
+    periods:
+    - one-time
+  - name: Late payment fee
+    access: other
+    model: subscription
+    model_how: derived
+    units:
+    - other
+    periods:
+    - other
+  - name: Late payment interest
+    access: other
+    model: subscription
+    model_how: derived
+    units:
+    - money
+    periods:
+    - month
+  - name: International Shopping
+    access: other
+    model: metered
+    model_how: derived
+    units:
+    - transaction
+    periods:
+    - other
+  - name: Invoice - Processing
+    access: other
+    model: subscription
+    model_how: derived
+    units:
+    - other
+    periods:
+    - other
+  - name: Invoice - Settlement
+    access: other
+    model: subscription
+    model_how: derived
+    units:
+    - other
+    periods:
+    - other
+  - name: Boleto - Settlement
+    access: other
+    model: subscription
+    model_how: derived
+    units:
+    - other
+    periods:
+    - other
+  - name: Searches on Boleto Holmes
+    access: other
+    model: subscription
+    model_how: derived
+    units:
+    - other
+    periods:
+    - other
+  - name: Split payment
+    access: other
+    model: subscription
+    model_how: derived
+    units:
+    - other
+    periods:
+    - other
+  - name: Transfer - Pix
+    access: other
+    model: hybrid
+    model_how: derived
+    units:
+    - data
+    periods:
+    - other
+  - name: Pix Key search
+    access: other
+    model: subscription
+    model_how: derived
+    units:
+    - other
+    periods:
+    - other
+  - name: Card Payments - Debit
+    access: other
+    model: hybrid
+    model_how: derived
+    units:
+    - transaction
+    periods:
+    - other
+  - name: Card Payments - Credit
+    access: other
+    model: hybrid
+    model_how: derived
+    units:
+    - transaction
+    periods:
+    - other
+  - name: Committed Use Discounts
+    access: other
+    model: unstated
+    model_how: derived
+    units: []
+    periods:
+    - none
