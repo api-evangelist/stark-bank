@@ -1,0 +1,16 @@
+generated: '2026-10-12'
+method: none
+source:
+- https://zapier.com/apps/stark-bank/integrations
+- https://n8n.io/integrations/stark-bank/
+- https://composio.dev/toolkits/stark-bank
+- https://monid.ai/tools/stark-bank
+checked:
+- https://composio.dev/toolkits/stark-bank
+- https://monid.ai/tools/stark-bank
+- https://n8n.io/integrations/stark-bank/
+- https://zapier.com/apps/stark-bank/integrations
+summary: null
+marketplace_apps: []
+edges: []
+templates: []
