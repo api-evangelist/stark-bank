@@ -17,6 +17,10 @@ checked:
 - https://repo1.maven.org/maven2
 - https://rubygems.org/api/v1
 - https://zapier.com/apps/stark-bank/integrations
+- https://dadosabertos.bcb.gov.br/api/3/action/package_show?id=relacao-de-instituicoes-em-funcionamento-no-pais
+- https://olinda.bcb.gov.br/olinda/servico/BcBase/versao/v2/odata/
+- https://olinda.bcb.gov.br/olinda/servico/Informes_ListaTarifasPorInstituicaoFinanceira/versao/v1/odata/
+- https://olinda.bcb.gov.br/olinda/servico/Instituicoes_em_funcionamento/versao/v1/odata/
 summary: null
 marketplace_apps: []
 edges:
@@ -140,4 +144,39 @@ edges:
     detected: '2026-10-18'
   detected_by: sweep-official-sdks.py
   first_seen: '2026-10-18'
+- partner_name: Banco Central do Brasil authorized direct credit companies (Sociedades de Crédito Direto)
+  partner: null
+  partner_match: register
+  type: register
+  channel: regulator-register
+  relationship: standard-participant
+  direction: partner-built
+  evidence: https://www.bcb.gov.br/estabilidadefinanceira/relacao_instituicoes_funcionamento
+  category: Brazil BCB-authorized direct credit fintech (SCD)
+  contract_reference:
+    register: Banco Central do Brasil authorized direct credit companies (Sociedades de Crédito Direto)
+    spec_file: null
+    standard: null
+    role: authorized-direct-credit-company
+    institution_class: fintech
+    registrations:
+    - registered_name: STARK SOCIEDADE DE CRÉDITO DIRETO S.A.
+      register_status: authorized-active
+      register_country: BR
+      register_id: CNPJ 39908427
+      segment: Sociedade de Crédito Direto
+      matched_domain: starkbank.com
+      matched_by: domain+local-verified
+      evidence_url: https://www.bcb.gov.br/estabilidadefinanceira/relacao_instituicoes_funcionamento
+      licences:
+      - Sociedade de Crédito Direto
+      situation: Autorizada em Atividade
+      tariff_list_confirmed: true
+      domain_source: filed-website
+    signal_note: 'participation only: a Banco Central do Brasil authorisation to operate; no API conformance is
+      published by this register'
+    detected_by: sweep-brazil-bcb-authorized-institutions.py
+    detected: '2026-10-22'
+  detected_by: sweep-brazil-bcb-authorized-institutions.py
+  first_seen: '2026-10-22'
 templates: []
