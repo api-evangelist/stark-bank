@@ -161,3 +161,74 @@
     detected: '2026-10-22'
   status: not-a-workflow
   arazzo: null
+- slug: stark-bank-hex
+  label: Hex
+  partner: hex-pm
+  partner_name: Hex
+  category: official SDK (Elixir/Erlang)
+  type: register
+  channel: package-registry
+  evidence: https://hex.pm/packages/stark_bank
+  source: edge
+  relationship: distribution-channel
+  contract_reference:
+    register: Hex (public registry JSON)
+    spec_file: null
+    language: Elixir/Erlang
+    packages:
+    - name: stark_bank
+      version: 1.1.3
+      released: '2020-04-15'
+      released_field: inserted_at
+      lapsed: true
+      page: https://hex.pm/packages/stark_bank
+      repo_leg: github-org:starkbank
+      publisher_leg: org:starkbank
+      matched_by: github-org
+    - name: starkbank
+      version: 2.6.2
+      released: '2021-11-10'
+      released_field: inserted_at
+      lapsed: true
+      page: https://hex.pm/packages/starkbank
+      repo_leg: github-org:starkbank
+      publisher_leg: org:starkbank
+      matched_by: github-org
+    current: false
+    signal_note: 'an official package on the registry: distribution, not an integration; lapsed = no release in
+      24 months'
+    detected_by: sweep-php-dart-elixir-package-registries.py
+    detected: '2026-10-22'
+  status: not-a-workflow
+  arazzo: null
+- slug: stark-bank-packagist
+  label: Packagist
+  partner: packagist
+  partner_name: Packagist
+  category: official SDK (PHP)
+  type: register
+  channel: package-registry
+  evidence: https://packagist.org/packages/starkbank/sdk
+  source: edge
+  relationship: distribution-channel
+  contract_reference:
+    register: Packagist (public registry JSON)
+    spec_file: null
+    language: PHP
+    packages:
+    - name: starkbank/sdk
+      version: 2.26.0
+      released: '2026-10-13'
+      released_field: time
+      lapsed: false
+      page: https://packagist.org/packages/starkbank/sdk
+      repo_leg: github-org:starkbank
+      publisher_leg: email:starkbank.com
+      matched_by: domain
+    current: true
+    signal_note: 'an official package on the registry: distribution, not an integration; lapsed = no release in
+      24 months'
+    detected_by: sweep-php-dart-elixir-package-registries.py
+    detected: '2026-10-22'
+  status: not-a-workflow
+  arazzo: null
